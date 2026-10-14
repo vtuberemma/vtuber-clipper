@@ -1,0 +1,534 @@
+VTuber Clipper  ♡  v2.2 BETA  - no Python install needed
+==========================================================
+1. Unzip the WHOLE folder anywhere (keep python\, app\, bin\ next to VTuberClipper.exe).
+2. Double-click VTuberClipper.exe.   (Windows SmartScreen: More info -> Run anyway.)
+
+THIS IS A BETA. It works and has been tested a lot, but it was tested on a Linux test machine, not on every Windows PC, and new things
+can still have rough edges. The window title, the banner and the Settings footer say "beta" so you always know. If something looks wrong:
+Settings -> About (or press F1) -> "Copy info for a bug report", then paste it into your message together with what you did.
+
+WHAT'S NEW IN 2.2 (beta)   - smarter clip finding, 50 new things, and a bug hunt
+  The first thing to know: Smart finding is ON by default (Shorts -> "Smart finding" tab). It changes WHICH moments get picked and how they are labelled.
+  To get the old way of finding clips back, untick "Smart finding (recommended)". Everything else that is new is OFF until you switch it on.
+
+  HOW "TRAINED" IS MEANT HERE  (please read - it is not what it sounds like)
+    - VTuber Clipper has no neural network and cannot learn from videos by itself. "Training" the finder means two honest things:
+      (1) I tuned rules - word lists, sound detectors and clip lengths - for the kinds of clips VTubers are known for: gameplay, reactions (laughing,
+          screaming, jump scares), talking, storytime and singing. That tuning used published advice about short videos and descriptions of well-known
+          VTuber moments. I could not download or watch real VTuber clips on my side, so the sound detectors were tested on SOUNDS I SYNTHESISED
+          (a scream, a laugh, a sung melody, speech) and on a made-up 4-minute stream. They were NOT tested on real VTuber footage.
+      (2) The app now learns from YOUR choices: clips you star or mark as posted (and clips you keep or delete in Review mode) teach it which kinds and
+          lengths you like ("Learn from the clips I keep"). It needs at least 3 kept clips before it does anything.
+    - The advice it follows comes from published articles and analyses about short videos. I have not been able to check those claims myself,
+      so treat them as rules of thumb: open on the best moment, no "hey guys, welcome back", a new beat every few seconds, cut right after the payoff,
+      about 18-30 s for reactions and gameplay, 30-50 s for stories.
+    - Please check what it picks the first few times, and tell me which kind of clip it gets wrong - that is the fastest way to make it better.
+
+  THE 50 NEW THINGS
+  🧠 Finding the right moment  (Shorts -> Smart finding)
+     1  Five kinds of moment - gameplay, reaction, talking, story, singing - each with its own rules. Every clip is labelled with its kind.
+     2  Match the captions to the kind (pop-in words for gameplay, line captions for stories, karaoke for singing).
+     3  Laughing is heard in the sound, not only read in the words ("hahaha" typed by the speech-to-text is not enough).
+     4  Screaming / squealing is heard in the sound.
+     5  Singing is heard in the sound (steady pitch, held notes) and the lyrics are shown as karaoke captions.
+     6  Setup -> punchline: the clip starts at the setup and ends at the laugh.
+     7  Story shape: stories are snapped to where the thought starts and finishes.
+     8  Greeting skip: clips don't start on "hey guys, welcome back".
+     9  A much bigger vocabulary of laughs, screams, fails, wins, rage, scares, cute moments and chaos (also in a few other languages' common words).
+    10  Variety: a mix of kinds instead of five clips of the same thing.
+    11  Smart length: reactions run short, stories run longer (inside your min / max).
+    12  End on the payoff: cuts the tail after the punchline.
+    13  Chat helps: a saved chat log (.json / .csv / .txt) makes busy-chat moments count for more.
+    14  "Why this moment" in each clip's title-ideas file (what was heard, what was read).
+    15  My taste: learns from the clips you keep (needs 3+).
+    16  Title and hook ideas that fit the kind of clip.
+  🎬 Picture, sound and captions   (Captions / Picture & voice / Logo & music tabs)
+    17  A logo that hops to a new corner every few seconds.
+    18  Slow-motion on the biggest moment.
+    19  A freeze-frame beat before the punchline.
+    20  Teaser: a one-second flash of the best moment at the very start.
+    21  Big reaction words that pop up (LOL, EEEEK!, OOF, LET'S GO!, NOPE...).
+    22  Tame loud screams (a gentle limiter, so nobody's ears hurt).
+    23  Hush hiss (removes steady background noise).
+    24  Caption letter case: automatic / lower / normal / UPPER.
+    25  Caption outline thickness and shadow strength.
+    26  Words at a time (1 to 6 words on screen).
+    27  A see-through dark box behind the captions.
+    28  Rainbow words.
+    29  Extra copies in other shapes (square 1:1, landscape 16:9, 4:5) next to every clip.
+  🧰 Tools and workflow   (the "Tools" button in the top corner, and My clips)
+    30  Watch a folder: tells you (or starts the Shorts by itself) when OBS saves a new recording.
+    31  Review mode: go through new clips one by one - keep (K), delete (D), later (S / space).
+    32  Search your clips and give them your own tags.
+    33  Save a spreadsheet (CSV) of your clips with titles and hashtags.
+    34  Hashtag bank: always-on tags, per game, per kind of moment.
+    35  Health check: video tool, downloader, speech-to-text, fonts, free space, save folder.
+    36  Clean up leftovers from stopped runs.
+    37  Free up space: empty the caches, or delete old downloaded videos (your clips stay).
+    38  Share a look as one line of text; paste a friend's.
+    39  Compare 3 looks side by side on the same few seconds.
+    40  "Make this moment again": cut the same moment again with today's settings (the old clip stays).
+    41  "Where is this from?": the video and time a clip was cut from.
+    42  A ready-to-post folder: every finished clip (and its title file, cover and subtitles) is copied there too.
+    43  Teach me your chat's slang (My words) - it counts when I look for laughs, screams, wins and fails.
+    44  Remembers your cam box for each game.
+    45  If the app was closed in the middle of a run, it offers to pick it up again.
+    46  "Try just one first" makes one clip so you can check the look before making the rest.
+    47  Fill the post planner with your newest unposted clips at good times in one click.
+    48  File names can use {type} {score} {len} as well as the old {date} {n} {title}... tokens.
+    49  Save a Best-moments list to a file and open it another day.
+    50  "Only look between" a start and an end time (like 1:20:00 to 2:00:00) - for a long stream where you only want one part.
+
+  🐞 BUG HUNT - what was found and fixed
+    Tested: every new feature switched on at once over 12 kinds of awkward video (no sound, one-channel sound, 24 and 60 fps, portrait, 4:3, 10-bit,
+    variable frame rate, 6-second and 12-second videos, no speech), file / folder / caption text full of quotes, braces, backslashes, emoji and Japanese,
+    hundreds of randomly broken settings, and the screens with empty, missing or odd folders.  Found and fixed:
+     - A hand-damaged settings file (a list where a number belongs, "inf", the word "false" for a switch) could crash a render. Now repaired
+       quietly and the default is used.                                                                           [affected 2.1 and older]
+     - "Compare 3 looks" crashed if the Tools window had been opened and closed before.
+     - Open windows (Tools, Review, Compare) kept the OLD colours when you changed the theme. They now follow it.
+     - A first version of the settings fix stopped the "reaction words" from ever reaching the video. Caught by the old tests; fixed.
+     - Reaction words could have been a picture-less emoji box on a PC without an emoji font; they are plain words now.
+     - The Health, Clean up, Space and My words pages came back empty because a background job touched the screen. Fixed.
+     - A cut-off look code was accepted and half-applied. It is now refused with a plain message.
+     - Singing was heard in some speech and sirens in some music (false alarms); the detector is stricter now.
+     - Several ffmpeg details (fade lengths, the caption box layer, the order of audio filters) corrected before release.
+     - Times typed as 1:20:00, 83:20, 90 or 1h2m3s are all understood; a bad time is explained instead of ignored.
+    Not a bug, but good to know: a video with no sound track can't be transcribed, and a video shorter than one clip can't be cut. The app says so in
+    plain words and does not crash.
+
+  What 2.2 does NOT do (on purpose)
+    - It does not post for you, show followers / views / analytics, or track your face - those need your own logins / developer keys or a camera model
+      that a portable program cannot safely carry. The planner still reminds you; you press upload.
+    - It makes no pictures from scratch.
+    - It is not a trained model. See "How trained is meant here" above.
+
+WHAT'S NEW IN 2.1 (beta)   - easier to use, new features, and the built-in chibi pictures are gone
+  CHANGED: 🧹 Easier to use
+    - SIMPLE VIEW is what you see first. Under the look pictures there are only four tabs: Quick setup, Words & buttons, Captions, Logo & music.
+      Quick setup holds the few things most people change: how many clips, how long, the shape, where you post, the layout, where your cam is, and a
+      handful of switches (animated captions, title at the start, clean up my voice, skip moments I already made, cover picture, ...).
+    - "Show all options" (next to the tabs) shows every tab, like before. "Simple view" brings the short list back. The app remembers your choice.
+    - Every tab has a plain name and a one-line description under the tab bar. The old names changed like this:
+        Basics -> Clips & layout     Extras -> Logo & music      Posting -> Posting & files
+        Emotes -> Chibi emotes       Polish -> Picture & voice   (Effects and Captions keep their names)
+      Older parts of this README still use the old names.
+    - The row of looks (Kawaii Hype, Gameplay Clutch...) can be folded away with "Hide looks" and the app remembers that too.
+    - On a small window the tab bar now wraps onto a second row instead of running off the edge.
+  CHANGED: 🎭 The built-in chibi pictures are removed
+    - The 16 starter pictures are no longer in the program. The "Chibi emotes" tab and "My emotes" are still there: add your own pictures
+      ("Add pictures..." in My emotes) and everything works exactly as in 1.9 / 2.0 (feelings, plan check, your own words...).
+    - Until you add pictures the app says so, plainly ("no chibi pictures yet - open the Chibi emotes tab, press My emotes and add yours"),
+      and a Short or Recap is still made without them. The "Chibi: my emotes" banner mascot shows the drawn mascot until you have pictures.
+    - Pictures you already added (C:\Users\<you>\VTuberClipper Emotes) stay. If you update from 2.0, delete the old folder app\emotes
+      and the file app\vcstudio.py (the update zip leaves them - they are not used any more).
+    - The banner / theme mascots (cat, bunny, fox, witch...) are drawn pictures too and are still there. Tell me if you want those removed as well.
+  NEW: 💬 Words and buttons on the video   (Words & buttons tab)
+    - On-screen words: up to three texts. For each one you choose when it appears (or "from the end" of the clip), how long it stays, where it
+      sits (near the top / in the middle / lower third) and the look (colour pill / big outlined letters / small plain text).
+      "Preview" at the top shows how it will look. An empty text is switched off.
+    - Buttons: Like / Follow / Subscribe / Share / Comment pop up in the middle of the picture for about two seconds, one after another, spread
+      over the clip. They never run into the end card.
+    - Typewriter captions (Captions tab -> Style: "Typewriter - letters type out"): a short phrase types itself out while you say it.
+  NEW: 🧩 More layouts, and "Design my own..."
+    - Game on top + cam below, Cam on the left + game on the right, plus the ones from before.
+    - "Design my own..." (Quick setup or Clips & layout): drag the game box and the cam box on a phone-shaped canvas, drag the white corner to
+      resize, make the cam round, choose "fit" (whole picture) or "fill" (cropped), pick the background, or start from one of six examples.
+      "My own layout" is then used for every clip, and for the style preview.
+  NEW: 🔊 Read it out loud   (Words & buttons tab)
+    - Tick "Read it out loud" on any of your on-screen texts and a voice says it while it shows; the game sound dips under the voice and comes
+      back. On Windows it uses the voices installed on your PC (Settings -> Time & language -> Speech). Pick the voice and the speed, and press
+      "Hear it" to try it. (If the voice cannot be started the clip is still made, just without it, and Details says so.)
+  NEW: ✂ Trim / tidy this clip   (My clips -> ⋯ More)
+    - Choose where the clip starts and ends (type the seconds, or "Pick on the timeline..."), optionally cut out the quiet parts (when nobody
+      talks), and add a fade in / out. A NEW clip is made next to the old one - the original is never touched.
+  NEW: 🎬 Montage   (My clips -> Montage, or ⋯ More -> Add to a montage)
+    - Pick two or more clips, put them in order, choose the transition (straight cuts, crossfade, fade through black, slide, wipe, circle open,
+      dissolve) and make one video. Picture and sound are blended; clips of different shape are fitted to the first one.
+  NEW: 🗓 Post planner   (My clips -> Post planner, or ⋯ More -> Plan a post)
+    - Plan which clip goes on which platform (TikTok / YouTube Shorts / Instagram Reels / X) and when ("tomorrow 7pm", "fri 20:30", "2026-10-20 18:00").
+      "Good times" suggests the usual busy hours of each platform (general habits, not live numbers).
+    - While VTuber Clipper is open it reminds you at that time: "Open TikTok" opens the upload page and copies your title; "In 15 min" snoozes;
+      "Done" ticks it off. Plans are saved. If the app is closed at that time you see the reminder the next time it opens.
+  What 2.1 does NOT do (on purpose)
+    - It does not post for you, show your followers / views or read your analytics: TikTok, YouTube, Instagram and X only allow that with your own
+      login and developer keys, which a portable program cannot safely hold. The planner reminds you; you press upload.
+    - It does not track faces to follow you around the screen. "Find it for me" and "Select area" place the cam box once; a layout you design
+      stays where you put it.
+    - It makes no pictures from scratch (no emote maker, schedule graphic, quote card or GIF) - those were removed in 2.0.
+
+WHAT'S NEW IN 2.0 (beta)   - over 30 new things. Everything new is OFF until you switch it on, so your clips look exactly as before until you want more.
+  NEW: 🎨 The "Polish" tab   (Shorts -> Polish)
+    Picture
+      - Colour look: Warm sunset, Cool moonlight, Vintage film, Noir black & white, Pastel dream, Neon pop, Cinematic teal & orange.
+      - Crisp picture (Light / Strong): smooths a little grain and sharpens edges. Good for soft or blocky stream quality. Slower to render.
+      - Fade in and out (Quick 0.4 s / Smooth 0.9 s): picture and sound fade from / to black.
+      - Brighten dark videos automatically: the app measures the picture and lifts the shadows ONLY when it really is dark. Normal videos are untouched.
+      - Soft dark corners (vignette).
+      - Cut away black bars: finds real, solid black bars (letterbox / pillarbox) and crops them so the game fills the frame.
+        (A dark scene is not cut - only bars that are black all the way.)
+      - Hide a spot: "Choose on the picture..." shows a frame of your video; drag a box over a chat name, a donation name, an address or a
+        notification. It is blurred, pixelated or covered with a black box in every clip, even where the clip is cropped or zoomed.
+        The box is saved as a part of the picture, so it also fits your other videos from the same game or stream.
+    Overlays
+      - Name tag (lower third): your name slides in from the side for about 3 seconds with a small line under it ("MiaVT" / "Variety streamer").
+      - Follow reminder: a short pill ("Follow for more") pops up in the middle of clips longer than 8 seconds.
+      - "PART 2/5" badge on every clip of one run (handy for a series). Not shown when you only make one clip.
+      - Chibi buddy: a picture of your model (pick the feeling, the corner and the size) sits in a corner and hops while you talk, then rests
+        when you are quiet.
+      - The picture reacts to a chibi emote: a small colour shake when it is scary / angry, a quick flash when it is happy, the colour drains
+        when it is sad. (Needs "Chibi emotes" in the Emotes tab.)
+    Sound
+      - Voice effect: Deeper, Higher, Chipmunk, Robot, Echo (cave), Old telephone, Megaphone, Underwater. The speed stays the same.
+        "Hear it" plays 6 seconds of YOUR video with the effect so you can check before you make clips.
+      - Voice sound: Warm and soft / Crisp and clear / Podcast-radio. Works together with "Clean up my voice" in the Extras tab.
+      - Bleep sound: Classic beep, Silence, Cartoon boing, Ding, Duck quack, Laser zap (also with "Hear it"). Used for the words you bleep (Extras).
+      - Loudness: -14 (TikTok / Shorts / Reels, the default), -16 (a bit quieter), -12 (extra loud), or leave the volume as it is.
+      - A soft pop sound when a chibi emote appears: rising for happy feelings, falling for sad or scary ones.
+  NEW: 📎 Extra files and names   (Shorts -> Posting)
+    - A transcript (_transcript.txt) with times, and web subtitles (.vtt). (If you use "Bleep words" in the Extras tab, those words are starred out
+      in the transcript too.)
+    - File names: type a pattern such as  {date} {game} clip {n}  . You can use {video} {n} {hook} {date} {game} {time} {channel}. An example name is
+      shown under the box. Nothing is ever overwritten: the same name again becomes "name (2)".
+    - "Put each VOD's clips in their own folder": Shorts / <name of the video> / ...
+    - 🗑 Delete in My clips removes the clip AND all its extra files (and the empty VOD folder).
+  NEW: 🧰 Little helpers
+    - ↺ Reset tab (next to the tab buttons): puts one tab back to normal. Asks first; your videos and the other tabs are not touched.
+    - 📋 next to the link box (or Ctrl + Shift + V): paste a Kick / Twitch / YouTube link from the clipboard and start the download.
+    - ⏰ next to the Make button (or Ctrl + T): start later. Type minutes ("90"), hours ("1.5h") or a clock time ("23:30", "9pm"). The PC stays
+      awake while it waits (if "Keep my PC awake" in Settings -> Performance is on). Press the clock again to cancel.
+    - ★ Favourites and "✓ Mark as posted to..." (YouTube / TikTok / Instagram / X) in My clips (⋯ More), with "Favourites only" and
+      "Hide posted" filters, and "Open an extra file" (cover picture, transcript...).
+    - 📊 Your numbers (My clips, or Settings -> Tools): how many clips, how long, how much space, favourites, posted, your best hype score, and
+      clips made per week.
+    - 🧰 Settings -> Tools: back up all your settings, profiles, styles, emote list and your own emote pictures in one .zip, and restore
+      them on a new PC. Restoring closes the app; open it again to load everything.
+    - The Details log has Save / Copy / Clear buttons.
+    - The mascot gives short tips about what you are doing ("Press Find it for me to set your cam!"). Switch them off in Settings -> Tools.
+    - Keyboard: Ctrl+Enter make, Ctrl+O choose a video, Ctrl+Shift+V paste a link, Ctrl+1...6 switch page, Ctrl+T start later,
+      Ctrl+L Details, Ctrl+, Settings, F1 About.
+    - The window bars shrink a little instead of running off the window when the window is small.
+  Good to know
+    - The Polish options also show in the style preview (the ▶ Preview button).
+    - New settings are remembered, are part of Profiles, and "Save as my style" does not include them (a style is about looks of captions
+      and effects; your Polish settings stay yours).
+    - The whole Polish tab also works for the X (Twitter) video. Recaps get the picture and voice options (colour look, crisp, brighten, vignette, black
+      bars, hide a spot, voice effect and sound, chibi buddy) but not the name tag, follow pill, fade or part badge, because those belong to one clip,
+      and the recap keeps its own loudness. The transcript and the file name pattern are for Shorts.
+    - Tested on a Linux test machine, like the rest of the app: pictures were checked by measuring real frames and sound by measuring real
+      audio. Voice effects and colour looks are a matter of taste - try them with "Hear it" / Preview first.
+
+FROM 1.9 (beta)
+  NEW: 🎭 Chibi emotes for story time   (Shorts / Recap -> the "Emotes" tab)
+    Pictures of your model (made with EmoteLab or anything else) pop up while you tell a story, matching the feeling of what you are
+    saying at that moment: scared when you say "I was so scared", laughing on "hahaha", dead on "I'm dead", a blank stare when you go quiet.
+    They pop in with a little motion (shake for fear / angry, bounce for laughing / celebrating, jump for shocked, sink for dead, sway for
+    tired / crying, slide for cool, creep for yandere) and fade out again. Switch it on with "Show my chibi emotes while I tell a story".
+
+    HOW THE PROGRAM KNOWS WHEN TO USE THEM
+      - It reads the words of the clip (the same words used for the captions), one sentence at a time, and looks for the feeling in it.
+        It knows about 1,500 words and phrases for 27 feelings: strong ones ("terrified", "I'm dead", "lets go", "crying laughing"),
+        normal ones ("scary", "annoying", "winner") and mild ones ("worried", "weird"). A mild hint alone is not enough on "Balanced",
+        two of them in one sentence are.
+      - It understands "not": "I was not scared" and "it wasn't funny" show nothing. "so scared", "really mad" count stronger.
+      - A "!" at the end and a loud moment in the audio make fear / angry / shocked / celebrating stronger. "hahaha", "lol", "kekw" and
+        "lololol" are laughing. A short "what?" is confused. A silence of 1.4 seconds or more in the middle of talking is a blank stare.
+      - Not every sentence gets a picture: it picks the strongest moments, keeps a gap between pictures (3 s on Balanced), never shows two at
+        once, does not repeat the same feeling again and again, and takes turns when you have several pictures for one feeling.
+      - "How many": Only the big moments (about 3 a minute) / Balanced (about 6) / Lots of reactions (about 10).
+      - It never needs the internet and nothing is sent anywhere. It works from word lists, not from an AI that understands the whole
+        story - so sarcasm and unusual words can fool it. That is why you can look at the plan first:
+    ✎ CHECK THE PLAN FIRST   (tick "Let me check and change the emote plan before the videos render")
+      Before the videos are made, a window lists every picture: the second, the feeling, the picture and WHAT WAS SAID that made the app
+      choose it. Click a line to change the feeling or picture, type a new time, make it stay longer or shorter, remove it, add one, or go
+      "Back to the app's plan". "No emotes this time" and "Skip checking" are there too. (Your VOD is never changed.)
+    🖼 MY EMOTES   (button in the Emotes tab)
+      - (Since 2.1 the program has no pictures of its own - you add yours. Before 2.1 there were 16 starter pictures.)
+      - "Add pictures..." copies your PNG / WebP / GIF files into C:\Users\<you>\VTuberClipper Emotes (a see-through PNG looks best).
+        The feeling is guessed from the file name (my_cry_2.png = Crying); you can also drop files into that folder yourself.
+      - "Feelings..." on a picture: tick every feeling it is for (one picture can serve several). Several pictures for one feeling
+        take turns.
+      - "My own words": words or short phrases that should bring a feeling up for YOU ("skill issue, big yikes"). They count as strong hints.
+      - "New feeling...": your own feelings (Facepalm, Evil laugh, Hungry...) with their own words.
+      - "Try a sentence": type something you might say and see which feeling the app hears, because of which word, and which picture it
+        would show. It also tells you when a hint is too weak for your "How many" setting.
+    Good to know
+      - When you have no picture for a feeling, the app tells you ("I also heard 3x Confused - add a picture for that feeling"), and the
+        plan window shows it too. Add one in My emotes and it is used from then on.
+      - The feeling of a picture is guessed from its file name. If one is wrong, press "Feelings..." on it and change it.
+      - Emotes sit left / right (taking turns, or always one side), or on top - set under "Where" - above the captions, inside the
+        TikTok / Shorts safe area. "Size" is a % of the video width.
+      - "Also react to loud moments when nobody said a feeling" is for gameplay VODs (a shocked / laughing / celebrating reaction on loud peaks).
+      - "Use them in Recap videos too" and "Put the clip's strongest feeling on the cover picture" are in the same tab.
+      - The little emoji pictures above the captions pause while a chibi is showing, so the same feeling is never shown twice.
+      - The style preview (Effects / Captions tabs) shows the emotes on its demo story.
+      - Your pictures stay on your PC in C:\Users\<you>\VTuberClipper Emotes (emotes.json there remembers feelings and words).
+  NEW: 🎨 8 new themes with chibi mascots (26 themes in total)   (Settings -> Theme)
+    Clown Party (light, pink + blue), Cool Shades (dark blue), Gamer Night (dark purple + green), Cozy Coffee (warm browns),
+    This Is Fine (dark orange), Trash Panda (light teal), Yandere Rose (dark, crimson + violet), Midnight Ghost (dark blue-violet).
+    Each one comes with its own chibi mascot (gamer, cool, chaos, spooky, clown, trash, cozy, yandere) in five moods: idle, blinking,
+    working, happy, worried. They can also be picked by hand under Settings -> Theme -> Banner mascot.
+  NEW: 🎭 "Chibi: my emotes" banner mascot
+    The mascot is built from YOUR emote pictures: she plays cool / gaming while idle, tired while a job runs, celebrating when it is done,
+    crying / scared when something went wrong. The cat / bunny / fox / witch costume mascots from 1.7 are all still there.
+  NEW: the debug info for bug reports also lists the emote settings.
+
+FROM 1.8 (beta)
+  NEW: 🎵 Your own background music - a "My music" folder   (Recap page, and Extras tab -> Background music)
+    The app brings NO music of its own, so nothing in it can get a copyright claim on YouTube or TikTok. You add the songs:
+      - "➕ Add songs..." copies the songs you pick into the folder "VTuberClipper Music" in your user folder (C:\Users\<you>\VTuberClipper Music).
+        Songs that are already there are not copied twice. You can also just drop mp3 / wav / m4a / ogg / flac files into that folder
+        ("📂 Open my music folder" opens it).
+      - The drop-down then offers "My music folder: a different song each time" and every song by name. A Short gets a different song each
+        time; a RECAP plays the songs as a playlist with 3-second cross-fades for the whole video; the music still ducks under speech.
+      - Every song is made equally loud (-14 LUFS), so a quiet song is not lost under your voice and a loud one does not drown it, and
+        "▶ Hear it" plays 14 seconds at the level it will have in the video.
+      - "A song or folder from somewhere else..." uses a song or a whole folder without copying anything (subfolders too).
+    Only add music you may use: your own, bought, or free-to-use. Game / TV / film soundtracks and most chart songs get claimed by their
+    owners on YouTube, TikTok and Twitch (muted, demonetised or removed videos), and songs under "Creative Commons Attribution" (CC BY)
+    need a credit in the description. The app cannot check this for you.
+  NEW: 🔊 7 more sound packs (11 in total)   (Effects tab -> Impact sound pack)
+    Studio hits, Pops & pings, Glitch & robot, DJ scratch, Sparkle & chimes, Arcade rewards and Silly - from real CC0 recordings (Sonic Pi
+    sample set / freesound.org, and UI SFX by Romain Simon). The original four (Boom, Cute, Anime, Retro) are still there.
+    A clip now takes turns between several different hits instead of the same one every time, and the whoosh lands exactly on the cut.
+    "▶ Hear it" plays a demo of the pack, with a short description next to it.
+  NEW: 👤 Profiles (Settings -> Profiles)
+    A profile remembers everything for one channel: the look, logo, @name, music, sound pack, posting info and the Recap settings.
+    Save one per channel and switch with one click. Up to 30 profiles. (Profiles remember which music you picked, not the songs.)
+  NEW: 🕘 Recent videos and links (the button next to "Choose video...")
+  NEW: 🛡 Safer long jobs (Settings -> Performance -> "While it works")
+    Keep my PC awake while it makes videos (Windows no longer falls asleep half way), run at lower priority so your game or stream keeps its
+    frame rate (videos are made at the same quality, just a little slower when the PC is busy), and a warning when the drive for your save
+    folder has less than 1.5 GB free (4 GB for Recaps) - you can still go on.
+  NEW: the window remembers its size and place. A "What's new" window shows once after an update (also in Settings -> About).
+  NEW: Settings -> About: Copy info for a bug report, open the error log, open the save folder, the sound credits and music notes, and the shortcuts.
+  CHANGED: hover help in the Effects tab appears after 2 seconds (it was 5).
+  FIXED: Settings text was cut off unless you stretched the window (worst in the Performance tab). The window is wider now, long text wraps
+    to the space it has, and it re-wraps when you resize. Checked on every tab at the normal size and at a narrow window.
+
+FROM 1.7
+  NEW: the banner mascot is now a chibi version of YOU
+    A little you sits in the top-left of the banner: white hair with the pink tips, the crimson streak, the heart braid and X clip,
+    heart-pupil eyes, heart earrings and the choker. She has moods:
+      - normal: blinks, bobs a little and winks every now and then
+      - while a job is running: focused working face (angel and devil wings flap)
+      - job finished: happy face and sparkles for about 15 seconds
+      - something went wrong: worried face with a sweat drop
+    Click her and she says something cute.
+  NEW: costumes that follow the theme (Settings -> Theme -> Banner mascot)
+    Just you / Cat ears / Bunny ears / Fox ears / Witch hat / Angel (halo + wings) / Devil (horns + wings) / Robot / Ghost.
+    "Match theme" (default) gives each look its own costume: Neon Cyber = robot, Witchy Moon = witch, Angel Cloud = angel,
+    Devil Imp = devil, Kitsune Fox and Peach Soda = fox, Bunny Strawberry, Lavender Dream and Cotton Candy = bunny,
+    Mint Cream, Ocean Pearl and Bubblegum Dark = cat, Pumpkin Ghost = ghost, the rest = just you.
+    Or pick any costume yourself and keep it with every theme. "Classic mascot" brings back the old drawn cat girl.
+  NEW: two themes in your own colours: Crimson Heart (dark) and Snow Rose (light). 18 themes now.
+  CHANGED: the banner is a bit taller (88 px) so she is easy to see; the program's window icon is her too.
+  If the mascot pictures are ever missing (app\mascot folder), the old drawn mascot is shown instead - nothing breaks.
+
+FROM 1.6
+  NEW: Hover help in the Effects tab
+    Rest the pointer on any effect for 2 seconds (5 in 1.6) and a small box tells you what it does.
+  NEW: 🔇 Bleep swear words (Extras -> Bleep words)
+    "Also bleep common swear words (English)" covers them with a beep and shows **** in the captions, the hook title, the .srt and the
+    chapter list. Whole words only, so names and normal words are never touched. Your own "Bleep words" list works as before.
+  NEW: Skip moments I already made (Basics tab) + "Start over"
+    Run Shorts on the same VOD again and you get NEW moments, not the same top ones. A note shows how many clips were made so far from
+    this video; "Start over" forgets them. Untick the box if you want the same moments again. When every good moment has been made
+    already, I simply make the best ones again (and say so in Details) instead of stopping.
+  NEW: 🪝 Hook title modes (Captions tab -> Hook title)
+    Smart = the punchiest line of the clip as a teaser (default), "The first words said" = how it worked before, or "My own text":
+    write your own, and with several lines separated by | the clips take turns  (WAIT FOR IT | she did NOT expect this).
+  NEW: "When done" under the Make button
+    Play a chime (default; only after jobs that took a while) / Chime and open the folder / Do nothing / Put the PC to sleep /
+    Shut the PC down. Sleep and shut down wait 60 seconds with a Cancel button, only apply to that run (they are never remembered),
+    and only follow jobs that made videos. Pressing Stop or a failed job never triggers them.
+  NEW: Ctrl + Enter = Make
+  FIXED: clips with no speech now get a cover picture too (with a simple title).
+  FIXED: the status line after a download / update no longer says "see them in My clips" because of an earlier job.
+  FIXED: "Colour the big words" was cut off at the edge of a narrow window; it now sits next to the Font.
+
+FROM 1.5
+  NEW: 😂 Emojis on the captions (Captions tab)
+    Words like lol, love, dead, fire, wow or cute make a little emoji pop up above the caption (a few per clip; "Hype" intensity shows more,
+    "Subtle" fewer). It never shows on a word that is bleeped. On by default in Kawaii Hype, Pro Mix, Meme Clip and Win Party; one tick box
+    turns it on or off in any look. The pictures are bundled, so it works offline.
+  NEW: ✎ Check the captions before the videos are made (Captions tab -> "Let me read and fix the captions...")
+    After the moments are picked a window lists every clip with its text. Fix a mis-heard word, add or remove words - the timing follows
+    along. "Remember my corrections" adds fixes like  kit ten = Kitten  to your "Fix words" list, so it is right next time too.
+    "Skip checking" renders as it is, "Stop" cancels. Works for Shorts and for Shorts made from the Best moments list.
+  NEW: 🖼 Cover picture for every Short (Posting tab)
+    Next to each Short you get <name>_cover.jpg: a still from the best moment with a short title on top (kept clear of the captions).
+    Handy as the cover on YouTube / TikTok / Instagram. Can be turned off.
+  NEW: 📤 / 📥 Share a style (next to "Save as my style")
+    Save the current look as a small .vtstyle file and send it to another creator; they add it with 📥. The file only holds the look
+    (captions, effects, layout, colours) - no file paths, logo or music. Files from other people are checked before they are used.
+
+FROM 1.4
+  FIXED: picture and sound out of sync, then the picture freezes and jumps ahead
+    Stream downloads (Kick / Twitch VODs) sometimes have a few seconds where the video has no frames - lag on the stream, or a
+    piece missing in the download. The old cutting anchored the picture to the first frame it found, so it ran ahead of the sound and
+    then froze while the sound caught up. Now every cut piece is built from the exact start time you asked for, picture and sound are
+    forced to the same length, the transcript is aligned to the same clock as the picture, recaps are joined without drift, and
+    "Clean up my voice" no longer delays the sound. If a hole in the source falls in a silent part, it is cut out; if someone is
+    talking there, the picture stays frozen for that moment but the sound stays in sync (nothing can be invented for missing frames).
+    Settings -> Extras -> "🛠 Video fixes" can turn the repair off if you ever want the old behaviour.
+  NEW: 📝 Post helper
+    Pick a short you already edited (from any editor). I listen to it and write: title ideas, a YouTube description, and hashtags that
+    fit each app - YouTube Shorts (3-5 incl. #Shorts), TikTok (3-5), Instagram Reels (up to 5) and X (3). Games are recognised from
+    what is said and from the file name. Copy buttons for everything; a .txt is saved in <save folder>\PostKits.
+  NEW: 🐦 Twitter (X) tab
+    Drop in one video: it is made X-ready (captions burned in because X autoplays muted, even loudness, up to 2:20, a shape that
+    fills the feed, H.264 / AAC) and you get five scroll-stopping post ideas (a hook that makes people watch, not a summary), with
+    3 auto hashtags if you want them, a character counter, and "Another idea".
+  NEW: Recap tab - length range, parts, one video per game
+    * Video length is now a RANGE (e.g. 10 to 15 minutes). I pick moments until the video lands inside it.
+    * Make it as:  One video  /  A series of parts (e.g. 3 parts, or parts of about 10 minutes; each part is its own file with its own
+      YouTube chapters)  /  One video per game or chapter.
+    * Find the games: I look through the whole stream for where one game or chapter ends and the next begins (the picture changes
+      for minutes, dark loading screens, breaks, and things you say like "next game" or "chapter two"). You get a list - rename, join,
+      cut a part in two, move where a part starts, remove one - and every part becomes its own video. Games are named from what you said.
+      "Look for": Different games only / Games and chapters / Every big scene change.  "Parts": say how many there are if you know.
+    * "Only cut the stream into parts": no highlights, no re-encoding - the whole stream is split into files (instant). Good for a
+      full playthrough you want as a series. Cuts land on the nearest key frame, so a part may start a second or two early.
+    * A _series.txt next to the videos lists every file with its time in the stream and a title idea.
+  Shorts: the .txt next to each clip now uses the same title / description / hashtag writer.
+
+FROM 1.3  (new layout, faster, more StreamLadder-style features)
+  New layout
+    * Left side = your video + the Make button. Right side = what you are making. Four big buttons on top:
+      Shorts / Recap / Best moments / My clips.   The look gallery (cards that move when you hover) is now the first thing in Shorts,
+      with the settings in five small tabs below it: Basics / Effects / Captions / Extras / Posting.
+    * A little checklist above the Make button shows what is done and what still needs you (video, look, cam area).
+    * The video you picked shows as a picture with its length and size; drag a video file from Explorer onto the window to load it.
+    * Slimmer banner, dialogs open in the middle of the app, the window can be made smaller (down to 1000 x 640).
+  Faster
+    * The audio analysis of a VOD is saved, so Best moments, Shorts and Recaps of the same VOD don't redo it.
+    * Several clips can be rendered at the same time (Settings -> Performance -> "Clips rendered at once": auto, or 1-4).
+      Auto uses 1 on PCs with fewer than 6 cores, because rendering already uses every core.
+    * Speech accuracy: Fast / Balanced / Most accurate (Settings -> Performance).
+    * Lighter render settings for the glitch and round-bubble effects; the time estimate knows about all of this.
+  New StreamLadder-style features
+    * "Post on" safe zones (TikTok / YouTube Shorts / Instagram Reels): captions and the cam stay clear of the app's buttons.
+    * Clean up my voice: less hiss and hum, steadier volume (Extras).
+    * Intro clip / outro clip (a video or a still image) and an end-card text with a "Follow!" pill (Extras).
+    * Sticker / emote images (PNG or GIF) that pop up on the big moments (Extras).
+    * New layout "Gameplay + filler video": your clip on top and a looping filler video (e.g. satisfying / parkour) below.
+    * Background for the blurred layout: blur, a solid colour or your own picture.
+    * "Find it for me": looks for your facecam / model box in the video and lets you check and adjust it.
+    * Best moments: "Trim…" (frame previews + draggable handles), "Add my own moment", "Paste timestamps"
+      (from chat, a friend or YouTube chapters: 1:23:45 funny part / 12:30 - 13:10 boss fight) and "Remove".
+    * Hype score for every clip, saved in its title / description .txt.
+    * 🖼 My clips: a gallery of everything you've made, newest first - play, show in folder, copy the title, copy the
+      hashtags, open the upload page of TikTok / YouTube / Instagram, delete.
+  A bug fixed on the way: typed times in the Trim box ("1:02:03") are understood.
+
+FROM 1.2 (still here)
+  13 style presets with animated previews, "Preview" and "Save as my style", 18 themes + 9 mascot costumes, 26 effects, caption designer,
+  square / 4:5 / landscape output, round cam-bubble layout, logo + @handle, background music with ducking, translate to English,
+  SRT files, post kit (titles, description, hashtags), "clip that" markers, word search, several VODs at once.
+
+STEP 1  Get your VOD  (left side)
+  Paste a Kick, Twitch or YouTube link and press ⬇, or pick a video file you already have
+  (pick SEVERAL files in the Browse box to make clips from all of them in one go).
+  Kick:  kick.com/<channel>/videos/<id>     Twitch: twitch.tv/videos/<id>     YouTube: normal links
+  HTTP 404 usually means the VOD expired/was deleted, or the downloader was out of date (the app
+  updates its downloader automatically). Subscriber-only VODs: Settings -> Downloads -> cookies.
+
+STEP 2  Pick your look  (the gallery of cards; hover a card to see it move)
+  Kawaii Hype      cam on top, pop captions, hearts + sparkles on every reaction        (classic VTuber short)
+  Gameplay Clutch  speed lines, shockwaves, shake and a boom on big plays; yellow lit word
+  Story Time       talking / storytelling: model fills the frame, calm pans, readable captions
+  Pro Mix          what most editors make: hook title, bold phrase captions with the spoken word lit,
+                   tight punch-ins - works for story + gameplay (the "Opus-style" look)
+  Meme Clip        short and chaotic: bouncing comic captions, glitch + B&W flashes, reaction marks
+  Subtitled        speaks Japanese or another language? automatic English subtitles
+  Chill & Cozy     drifting petals, dreamy glow, soft captions
+  Retro Anime      VHS grain, photo frame, 8-bit sounds, pixel captions
+  Karaoke Night    big sing-along captions with the current word lit
+  Horror / Scream  shake, B&W flashes, glitch, red sticker captions, heavy boom
+  Cam Bubble       gameplay full-screen with the model in a round bubble
+  Win Party        confetti, hearts, bouncy captions
+  Minimal Clean    just captions and a gentle punch-in
+  A look only fills in the settings - every checkbox and drop-down stays editable afterwards.
+  Your own things (logo, music, intro, outro, stickers, filler video, @name, "Post on", voice clean-up) are NOT changed when you
+  pick a look. "Save as my style" keeps your tweaked version as a new card (🗑 deletes it again).
+
+STEP 3  Make magic
+  Shorts  (five small tabs)
+    Basics     how many clips; clip length is a RANGE (e.g. 25 to 45 s): every clip ends at a natural stop - the end of a
+               sentence or a pause - once the big moment has landed. Find moments that are: Action & reactions / Talking &
+               stories / A mix of both. Layout: cam on top + game below, whole screen on a blurred (or coloured / picture)
+               background, fill the frame, game full-screen + round cam bubble, cam / model only, or clip + filler video.
+               Shape: 9:16, 4:5, 1:1 or 16:9. Post on: TikTok / YouTube Shorts / Instagram Reels / anywhere.
+               Model / cam area: "Find it for me" or "Select area" (drag a box). Silence remover keeps 0.5 s of breathing room.
+    Effects    26 effects in three groups - Camera moves, Hit effects, Look & style. "All on" / "Clear all".
+               Hit effects land on real hype moments (loud bursts / hype words); if nothing happens, none are added.
+               Impact sound pack: 11 packs (boom, cute, anime, retro 8-bit, studio, pops, glitch, DJ, sparkle, arcade, silly) with "Hear it". Intensity: Subtle / Normal / Hype.
+    Captions   style (pop one word, karaoke sing-along, box, bounce, two-line subtitles), font, size, position,
+               text / highlight / outline colours, "colour the big words", live sample. Language: auto-detect or pick one;
+               "translate to English" makes English subtitles from any language. Names / terms hint and
+               "wrong = right" fixes help the speech model with VTuber names and slang.
+    Extras     logo (PNG) + corner, @name on the video, intro / outro clip, end-card text, sticker images,
+               background music (your own songs, auto-ducks under speech), clean up my voice, bleep words.
+    Posting    SRT subtitle file, post kit (title ideas, description, hashtags and a hype score saved as a .txt next to each
+               clip), channel / game / tags.
+  Recap  turns a 3h+ VOD into a video (you choose the length range, 1 to 180 minutes) with YouTube chapters (a .chapters.txt next to it).
+         It can also be made as a series of parts, or as one video per game / chapter - see "FROM 1.4".
+           Highlights      - only the strongest moments, short and punchy (15-35 s each)
+           Story           - the best stretch from every part of the stream (45-100 s each)
+           Gameplay        - long action stretches (30-70 s each); quiet gameplay is kept, not cut
+           Story + gameplay - talking and play mixed, one best stretch from every part, in stream order
+         Options: captions, pans, jump-cut zooms, trim silences, background music (picked right on this page). SRT from the Extras tab applies too.
+  Best moments  scans the whole VOD and LISTS where the best parts are (time, length, rating, what's happening and a quote).
+         Nothing is rendered. "Find by words" searches what was said (e.g. "jump scare, thank you"); saying "clip that" on
+         stream is always found. Double-click a row to trim it, add your own moments or paste a list of times, copy the
+         timestamps, save them as a .txt (also saved automatically in <save folder>\Moments), or select rows and press
+         "Make Shorts from selected".
+  Post helper  a finished short in -> title ideas, a YouTube description and hashtags for YouTube Shorts / TikTok / Instagram Reels / X.
+         Add your links (Twitch, Discord...) and they go under the description. "Another idea" gives new wording.
+  Twitter  one video in -> an X-ready video + post text with a hook, 3 optional hashtags and a character count.
+  My clips  everything in <save folder>\Shorts, \Recaps and \Twitter as a gallery (click a picture to play it).
+
+HOW THE LOOKS WERE CHOSEN
+  They follow what VTuber clip editors and Opus Clip / StreamLadder users ask for most: the model cam on top with the
+  game below, big word-by-word captions with the spoken word highlighted, a hook line in the first second, a quick
+  zoom-in on every reaction, a short sound hit on the big moments, silences cut, and a clip that ends on a finished
+  sentence. Story streams get slower pacing and full-sentence captions; gameplay streams get faster cuts and louder hits.
+
+SETTINGS (top right)
+  Theme        18 themes (pastel, dark, VTuber and two in your own colours) and a chibi-you banner mascot (plain, cat, bunny, fox, witch, angel, devil, robot, ghost).
+  Output       Quality  Extreme 135 / High 80 / Medium 50 / Low 25 Mbps
+               Resolution 720p / 1080p / 1440p / 4K (the SHORT side of the video)      Framerate 25 / 30 / 60 fps
+               (bitrate is a target - simple scenes can come out smaller; going above your VOD's own
+               resolution only enlarges it)
+  Downloads    cookies, downloader auto-update.
+  Performance  save folder, speech model, speech accuracy, processor, clips rendered at once, GPU video encoding (NVENC / AMF / QuickSync),
+               and "Install GPU speech pack" (NVIDIA only, optional, ~1.4 GB one time download).
+  Tools        back up / restore all your settings, "Your numbers", mascot tips on / off, save or copy the Details log.
+
+Files are saved in <save folder>\Shorts (or Shorts\<video name> with "own folder"), \Recaps, \Twitter, \PostKits, \Moments and \VODs.
+The first transcription downloads the speech model (~460 MB for "small"; internet needed once).
+Transcripts are saved next to the video (.words.json; other languages / hints get their own file) so scanning,
+shorts and recaps of the same VOD are fast. The audio analysis is saved in %USERPROFILE%\.vtuberclipper_cache
+(it is safe to delete that folder).
+Time estimates learn from your PC and get better after each job.
+If something ever goes wrong, press "Details" in the app. A crash log is written to
+%USERPROFILE%\VTuberClipper_log.txt.
+Your favourites and posted marks are kept in %USERPROFILE%\.vtuberclipper.json together with your settings. Your saved styles live in %USERPROFILE%\.vtuberclipper_presets.json, previews in %USERPROFILE%\.vtuberclipper_previews,
+profiles in %USERPROFILE%\.vtuberclipper_profiles.json.
+
+GOOD TO KNOW
+  * "Find it for me" is a best guess: it looks for a box in the picture whose border stays put while the game moves. A
+    rectangular minimap can fool it - that's why you always get to check and adjust the box before it is used.
+  * Drag-and-drop of a video onto the window needs Windows; if it ever doesn't react, use "Choose video…".
+
+Not included (yet): scheduling / auto-posting to social sites, telling several speakers apart,
+game-specific moment detection (it listens for loud / excited moments instead). Hashtags are good evergreen picks for each app,
+not live trend data. Finding games is a best guess from the picture, breaks and what you say - check the list before you build.
+
+Included: ffmpeg (GPL, BtbN), yt-dlp nightly, deno (for YouTube), portable Python (astral-sh).
+Sound packs (app\sfx): CC0 - who made them is in app\CREDITS.txt (also in Settings -> About). No music is included.
+Caption fonts (app\fonts, each under its own free licence - see app\font_licenses): Bangers, Chewy, Creepster,
+Luckiest Guy, Mochiy Pop One, Pacifico, Poppins, Press Start 2P, Sniglet, Titan One.
+Emoji pictures (app\emoji): Twemoji, (c) Twitter, Inc. and other contributors, CC-BY 4.0 - see app\emoji\LICENSE-twemoji.txt.
+The GPU speech pack uses NVIDIA's redistributable CUDA 12 / cuDNN 9 libraries - see NVIDIA's license terms.

@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# generated test media and screenshots (python tests/make_fixtures.py recreates them)
+tests/_fixtures/
+tests/_shots/
+
+# build output
+dist/
+*.zip
+
+# the Windows runtime is NOT kept in git (see docs/PORTABLE_BUILD.md)
+/python/
+/bin/
+/VTuberClipper.exe
+
+# things the app writes next to itself or into a user folder while you test
+*.words.json
+.vtuberclipper*.json
+.vtuberclipper_ledger.json
+VTuberClipper_log.txt
+*.log
+.DS_Store
+Thumbs.db

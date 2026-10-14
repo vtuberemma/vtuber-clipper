@@ -1,0 +1,4 @@
+# What the Windows build ships in python\Lib\site-packages (its top-level choices; everything else comes with them).
+# Tk comes with Python itself. ffmpeg, yt-dlp (+ deno) are programs, not pip packages: put them in bin\ or on your PATH.
+numpy==2.4.6
+faster-whisper==1.2.1

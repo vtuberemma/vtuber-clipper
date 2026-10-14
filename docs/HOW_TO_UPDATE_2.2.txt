@@ -1,0 +1,18 @@
+HOW TO UPDATE VTuber Clipper to 2.2 BETA  (about 30 seconds)
+
+ 1. Close VTuber Clipper.
+ 2. Unzip this file. You get a folder called "app" and two text files.
+ 3. Open your VTuberClipper folder (the one with VTuberClipper.exe in it).
+ 4. Drag the "app" folder from this zip into it and choose "Replace the files in the destination" (Copy and Replace).
+    Files that change: streamclip.py, streamclip_app.py, vcpost.py, vcouts.py, vcpresets.py, vc20ui.py, vc21ui.py and CREDITS.txt.
+    New files: vcsense.py, vcsmart.py, vcmore.py, vctools.py and vc22ui.py.
+    The pictures, sounds and emojis are the same as in 2.1.
+    Your settings, saved styles, transcripts, music, emotes, your clips and the list of clips you kept are NOT touched - they live in your user folder.
+ 5. Start VTuberClipper.exe. A "What's new" window shows once.
+
+What is new in 2.2 is listed at the top of README.txt: Smart finding (it tells gameplay, reactions, talking, stories and singing apart - and the README says
+honestly what that does and does not mean), 50 new things (Tools window, Review mode, ready-to-post folder, watch a folder, reaction words, slow-mo,
+more caption controls...) and the list of bugs that were found and fixed.
+Smart finding is ON by default. To get the old way of finding clips back, untick "Smart finding (recommended)" in the Smart finding tab.
+Everything else that is new is OFF until you switch it on. The older updates (1.6 - 2.1) are included, so you can update straight from 1.5.
+If something doesn't start, press Details in the app, or look at %USERPROFILE%\VTuberClipper_log.txt.
