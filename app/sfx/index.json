@@ -1,0 +1,389 @@
+{
+ "version": 1,
+ "packs": {
+  "studio": {
+   "label": "Studio hits",
+   "about": "real drum, bass and cinematic impacts",
+   "hits": [
+    {
+     "file": "studio_hit1.wav",
+     "dur": 1.4,
+     "src": "bd_boom.flac"
+    },
+    {
+     "file": "studio_hit2.wav",
+     "dur": 0.901,
+     "src": "perc_impact1.flac"
+    },
+    {
+     "file": "studio_hit3.wav",
+     "dur": 0.656,
+     "src": "perc_impact2.flac"
+    },
+    {
+     "file": "studio_hit4.wav",
+     "dur": 1.3,
+     "src": "bass_drop_c.flac"
+    },
+    {
+     "file": "studio_hit5.wav",
+     "dur": 0.6,
+     "src": "bass_hit_c.flac"
+    },
+    {
+     "file": "studio_hit6.wav",
+     "dur": 1.8,
+     "src": "misc_cineboom.flac"
+    },
+    {
+     "file": "studio_hit7.wav",
+     "dur": 0.27,
+     "src": "drum_heavy_kick.flac"
+    },
+    {
+     "file": "studio_hit8.wav",
+     "dur": 0.22,
+     "src": "bd_haus.flac"
+    }
+   ],
+   "whoosh": [
+    {
+     "file": "studio_whoosh1.wav",
+     "dur": 0.298,
+     "peak": 0.147,
+     "src": "perc_swoosh.flac"
+    },
+    {
+     "file": "studio_whoosh2.wav",
+     "dur": 1.1,
+     "peak": 0.856,
+     "src": "ambi_swoosh.flac"
+    }
+   ]
+  },
+  "pop": {
+   "label": "Pops & pings",
+   "about": "light bloops, pops and snaps - cute and quick",
+   "hits": [
+    {
+     "file": "pop_hit1.wav",
+     "dur": 0.087,
+     "src": "elec_pop.flac"
+    },
+    {
+     "file": "pop_hit2.wav",
+     "dur": 0.184,
+     "src": "elec_blip2.flac"
+    },
+    {
+     "file": "pop_hit3.wav",
+     "dur": 0.199,
+     "src": "elec_plip.flac"
+    },
+    {
+     "file": "pop_hit4.wav",
+     "dur": 0.101,
+     "src": "elec_twip.flac"
+    },
+    {
+     "file": "pop_hit5.wav",
+     "dur": 0.662,
+     "src": "elec_blup.flac"
+    },
+    {
+     "file": "pop_hit6.wav",
+     "dur": 0.346,
+     "src": "elec_bong.flac"
+    },
+    {
+     "file": "pop_hit7.wav",
+     "dur": 0.308,
+     "src": "perc_snap.flac"
+    },
+    {
+     "file": "pop_hit8.wav",
+     "dur": 0.174,
+     "src": "perc_snap2.flac"
+    },
+    {
+     "file": "pop_hit9.wav",
+     "dur": 1.4,
+     "src": "perc_till.flac"
+    }
+   ],
+   "whoosh": [
+    {
+     "file": "pop_whoosh1.wav",
+     "dur": 0.32,
+     "peak": 0.081,
+     "src": "perc_swash.flac"
+    },
+    {
+     "file": "pop_whoosh2.wav",
+     "dur": 0.298,
+     "peak": 0.147,
+     "src": "perc_swoosh.flac"
+    }
+   ]
+  },
+  "glitch": {
+   "label": "Glitch & robot",
+   "about": "digital stutters and robot blips for chaotic clips",
+   "hits": [
+    {
+     "file": "glitch_hit1.wav",
+     "dur": 1.0,
+     "src": "glitch_perc1.flac"
+    },
+    {
+     "file": "glitch_hit2.wav",
+     "dur": 0.714,
+     "src": "glitch_perc2.flac"
+    },
+    {
+     "file": "glitch_hit3.wav",
+     "dur": 0.881,
+     "src": "glitch_perc3.flac"
+    },
+    {
+     "file": "glitch_hit4.wav",
+     "dur": 0.588,
+     "src": "glitch_perc4.flac"
+    },
+    {
+     "file": "glitch_hit5.wav",
+     "dur": 0.631,
+     "src": "glitch_perc5.flac"
+    },
+    {
+     "file": "glitch_hit6.wav",
+     "dur": 0.761,
+     "src": "glitch_robot1.flac"
+    },
+    {
+     "file": "glitch_hit7.wav",
+     "dur": 0.728,
+     "src": "glitch_robot2.flac"
+    },
+    {
+     "file": "glitch_hit8.wav",
+     "dur": 0.9,
+     "src": "mehackit_robot1.flac"
+    }
+   ],
+   "whoosh": [
+    {
+     "file": "glitch_whoosh1.wav",
+     "dur": 0.32,
+     "peak": 0.081,
+     "src": "perc_swash.flac"
+    },
+    {
+     "file": "glitch_whoosh2.wav",
+     "dur": 1.0,
+     "peak": 0.592,
+     "src": "ambi_swoosh.flac"
+    }
+   ]
+  },
+  "dj": {
+   "label": "DJ scratch",
+   "about": "record scratches and rewinds",
+   "hits": [
+    {
+     "file": "dj_hit1.wav",
+     "dur": 0.274,
+     "src": "vinyl_scratch.flac"
+    },
+    {
+     "file": "dj_hit2.wav",
+     "dur": 0.919,
+     "src": "vinyl_backspin.flac"
+    },
+    {
+     "file": "dj_hit3.wav",
+     "dur": 0.308,
+     "src": "perc_snap.flac"
+    },
+    {
+     "file": "dj_hit4.wav",
+     "dur": 0.27,
+     "src": "drum_heavy_kick.flac"
+    },
+    {
+     "file": "dj_hit5.wav",
+     "dur": 1.0,
+     "src": "bd_boom.flac"
+    }
+   ],
+   "whoosh": [
+    {
+     "file": "dj_whoosh1.wav",
+     "dur": 1.2,
+     "peak": 0.768,
+     "src": "vinyl_rewind.flac"
+    },
+    {
+     "file": "dj_whoosh2.wav",
+     "dur": 0.298,
+     "peak": 0.147,
+     "src": "perc_swoosh.flac"
+    }
+   ]
+  },
+  "sparkle": {
+   "label": "Sparkle & chimes",
+   "about": "bells, chimes and sparkles - sweet and shiny",
+   "hits": [
+    {
+     "file": "sparkle_hit1.wav",
+     "dur": 1.3,
+     "src": "elec_chime.flac"
+    },
+    {
+     "file": "sparkle_hit2.wav",
+     "dur": 0.278,
+     "src": "elec_bell.flac"
+    },
+    {
+     "file": "sparkle_hit3.wav",
+     "dur": 0.223,
+     "src": "elec_triangle.flac"
+    },
+    {
+     "file": "sparkle_hit4.wav",
+     "dur": 0.212,
+     "src": "elec_ping.flac"
+    },
+    {
+     "file": "sparkle_hit5.wav",
+     "dur": 1.4,
+     "src": "perc_bell.flac"
+    },
+    {
+     "file": "sparkle_hit6.wav",
+     "dur": 1.321,
+     "src": "achievement.mp3"
+    },
+    {
+     "file": "sparkle_hit7.wav",
+     "dur": 0.896,
+     "src": "badge.mp3"
+    },
+    {
+     "file": "sparkle_hit8.wav",
+     "dur": 0.99,
+     "src": "bonus.mp3"
+    }
+   ],
+   "whoosh": [
+    {
+     "file": "sparkle_whoosh1.wav",
+     "dur": 1.0,
+     "peak": 0.592,
+     "src": "ambi_swoosh.flac"
+    },
+    {
+     "file": "sparkle_whoosh2.wav",
+     "dur": 0.426,
+     "peak": 0.019,
+     "src": "swipe.mp3"
+    }
+   ]
+  },
+  "arcade": {
+   "label": "Arcade rewards",
+   "about": "level-up, bonus and achievement jingles",
+   "hits": [
+    {
+     "file": "arcade_hit1.wav",
+     "dur": 0.702,
+     "src": "level-up.mp3"
+    },
+    {
+     "file": "arcade_hit2.wav",
+     "dur": 0.93,
+     "src": "achievement.mp3"
+    },
+    {
+     "file": "arcade_hit3.wav",
+     "dur": 0.66,
+     "src": "bonus.mp3"
+    },
+    {
+     "file": "arcade_hit4.wav",
+     "dur": 0.565,
+     "src": "streak.mp3"
+    },
+    {
+     "file": "arcade_hit5.wav",
+     "dur": 0.471,
+     "src": "reward.mp3"
+    },
+    {
+     "file": "arcade_hit6.wav",
+     "dur": 0.558,
+     "src": "badge.mp3"
+    }
+   ],
+   "whoosh": [
+    {
+     "file": "arcade_whoosh1.wav",
+     "dur": 0.241,
+     "peak": 0.021,
+     "src": "swipe.mp3"
+    },
+    {
+     "file": "arcade_whoosh2.wav",
+     "dur": 0.32,
+     "peak": 0.081,
+     "src": "perc_swash.flac"
+    }
+   ]
+  },
+  "silly": {
+   "label": "Silly",
+   "about": "crow, burp, cowbell, twang - for goofy moments",
+   "hits": [
+    {
+     "file": "silly_hit1.wav",
+     "dur": 0.481,
+     "src": "misc_crow.flac"
+    },
+    {
+     "file": "silly_hit2.wav",
+     "dur": 0.619,
+     "src": "misc_burp.flac"
+    },
+    {
+     "file": "silly_hit3.wav",
+     "dur": 0.35,
+     "src": "drum_cowbell.flac"
+    },
+    {
+     "file": "silly_hit4.wav",
+     "dur": 0.624,
+     "src": "elec_twang.flac"
+    },
+    {
+     "file": "silly_hit5.wav",
+     "dur": 0.478,
+     "src": "elec_wood.flac"
+    },
+    {
+     "file": "silly_hit6.wav",
+     "dur": 1.0,
+     "src": "perc_door.flac"
+    }
+   ],
+   "whoosh": [
+    {
+     "file": "silly_whoosh1.wav",
+     "dur": 0.32,
+     "peak": 0.081,
+     "src": "perc_swash.flac"
+    }
+   ]
+  }
+ }
+}

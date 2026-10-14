@@ -1,0 +1,61 @@
+VTuber Clipper - sound credits
+==============================
+
+The sound packs built into the app are CC0 ("public domain"): you may use them in any video,
+on any platform, also for money, and you do not have to give credit. The credits below
+are a thank-you, not a requirement.
+
+The app has NO background music of its own. See the last part of this file.
+
+
+SOUND PACKS  (app\sfx)
+----------------------
+Studio hits, Pops & pings, Glitch & robot, DJ scratch, Sparkle & chimes, Silly
+  Samples from the Sonic Pi project (https://sonic-pi.net, github.com/sonic-pi-net/sonic-pi).
+  Their README states that all of these samples come from freesound.org and are released
+  under CC0. Thanks to the freesound artists whose sounds are used: AlaskaRobotics, anas76,
+  ani_music, davidworksonline, Halgrimm, hello_flowers, hullum (Mehackit), il112, looppool,
+  Neotone, Northern_Monkey, oceanictrancer, Peram, qubodup, Rodrigo The Mad, Snapper4298,
+  SoundCollectah, TasmanianPower, Zajo, Zott820.
+
+Sparkle & chimes (a few glass sounds), Arcade rewards
+  "UI SFX" by Romain Simon   https://uisfx.com   https://github.com/romainsimon/uisfx
+  Audio files released under CC0 1.0 (LICENSE-AUDIO of the package).
+
+Changes to all of the above: trimmed, faded and made equally loud.
+
+Boom, Cute, Anime, Retro
+  Made by the app itself from plain sound waves. No outside recordings.
+
+
+MUSIC YOU ADD YOURSELF
+----------------------
+Background music comes only from songs you add: "Add songs..." copies them into the folder
+"VTuberClipper Music" in your user folder (or point the app at any other song or folder).
+The app cannot know whether you may use a song. Game, TV and film soundtracks and most chart music
+are claimed by their owners on YouTube, TikTok and Twitch, which can mute, demonetise or remove
+your video. Songs under Creative Commons "Attribution" (CC BY) need a credit in your video description.
+Only use music you made, bought a licence for, or that is public domain / CC0.
+
+
+CHIBI EMOTES
+------------
+The 16 starter pictures (app\emotes) and the chibi banner mascots (app\mascot\chibi_*) are made from the chibi pictures of your own model that
+you made with EmoteLab. They are yours, not CC0, and they stay on your PC. Pictures you add yourself are copied into the folder
+"VTuberClipper Emotes" in your user folder and are only used by this app. If you ever share this program with someone else, take the
+pictures out first, and check the terms of the tool or artist behind any picture before you use it in monetised videos.
+
+
+NEW IN 2.0
+----------
+All the new sounds (the six bleep sounds, the emote pop sounds, the voice effects) are made by the program itself from plain tones and filters
+while your video is rendered - no sound files from anywhere are shipped for them, so there is nothing to credit.
+Your chibi pictures are yours (see CHIBI EMOTES).
+
+
+CLIP-FINDING ADVICE  (Smart finding, new in 2.2)
+------------------------------------------------
+Smart finding is not a trained model. Its word lists, sound detectors and clip lengths are rules of thumb. They were tuned on sounds made by the app's test tools
+and on published advice about short videos: articles and analyses by Opus (opus.pro), Subscribr, EasyViral, Virlo and Streams Charts about how long a short should
+be, what to put in the first seconds and how streamers' clips spread, and write-ups by Sportskeeda and Know Your Meme about well-known VTuber moments.
+Those sources' claims were not independently verified. No VTuber's video, voice or model was copied or used for training.
