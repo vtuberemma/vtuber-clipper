@@ -18,4 +18,4 @@ See the README. New behaviour needs a test in `tests/`: engine / helper tests pr
 
 1. Bump `VERSION` (and `BETA`) in `app/streamclip_app.py`, add the `WHATS_NEW` entries, write `docs/HOW_TO_UPDATE_<version>.txt`, update `docs/USER_GUIDE.txt` and `CHANGELOG.md`.
 2. `python tools/make_update_zip.py` makes `dist/VTuberClipper_update_<version>.zip`.
-3. The full portable zip is assembled as described in `docs/PORTABLE_BUILD.md`. Attach both to a GitHub Release.
+3. `python tools/make_portable_zip.py --runtime <a previous VTuberClipper folder>` makes the full portable zip (see `docs/PORTABLE_BUILD.md`). Attach both zips to a GitHub Release.

@@ -4,7 +4,7 @@
 
 | File | What it is |
 | --- | --- |
-| `VTuberClipper.zip` | The full Windows build, no installation. Unzip the **whole** folder anywhere and double-click `VTuberClipper.exe`. It includes Python, ffmpeg and yt-dlp (about 240 MB). Windows SmartScreen: *More info → Run anyway*. |
+| `VTuberClipper_2.2_beta.zip` | The full Windows build, no installation. Unzip the **whole** folder anywhere and double-click `VTuberClipper.exe`. It includes Python, ffmpeg and yt-dlp (about 240 MB). Windows SmartScreen: *More info → Run anyway*. |
 | `VTuberClipper_update_2.2_beta.zip` | For people who already have an older version: drag its `app` folder over your own and choose Replace. Your settings and clips are not touched. Steps are in the zip (`HOW_TO_UPDATE.txt`). |
 
 ## What's new

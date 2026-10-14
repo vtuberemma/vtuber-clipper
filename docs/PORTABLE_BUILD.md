@@ -22,6 +22,14 @@ VTuberClipper\
 4. Copy `docs/USER_GUIDE.txt` to `README.txt`.
 5. The app finds its tools because it puts `..\bin` (next to `app\`) first on its PATH when it starts.
 
+## Making the zip
+
+```
+python tools/make_portable_zip.py --runtime C:\path\to\a\previous\VTuberClipper
+```
+
+`--runtime` is an existing portable folder that has `python\`, `bin\` and `VTuberClipper.exe` (take it from the last release; those are not in git). The script writes `dist/VTuberClipper_<version>[_beta].zip` with `app\` and `README.txt` taken from this checkout, so the zip always matches what is in git. The version in the name comes from `app/streamclip_app.py`.
+
 ## The launcher
 
 `VTuberClipper.exe` is a small Windows program (about 220 KB, built with MinGW) that starts `python\pythonw.exe app\streamclip_app.py` from its own folder and shows *"Could not start. Keep the python, app and bin folders next to this exe."* if one of them is missing. **Its source was not kept, so it is not in this repo.** Until it is rebuilt, take it from a release, or use `run_windows.bat`, which does the same thing.

@@ -25,7 +25,7 @@ Smart finding is **not a neural network and was not trained on real VTuber clips
 
 ## Get it running
 
-**Windows, no installation (the way most people use it):** download the portable build (`VTuberClipper.zip`) from the Releases page, unzip the whole folder anywhere, double-click `VTuberClipper.exe`. SmartScreen: *More info → Run anyway*. To update, unzip `VTuberClipper_update_<version>.zip` and drag its `app` folder over your own (see [docs/HOW_TO_UPDATE_2.2.txt](docs/HOW_TO_UPDATE_2.2.txt)). The portable build bundles Python, ffmpeg and yt-dlp (about 600 MB) so it is not stored in git; how it is put together is in [docs/PORTABLE_BUILD.md](docs/PORTABLE_BUILD.md).
+**Windows, no installation (the way most people use it):** download the portable build (`VTuberClipper_<version>.zip`, e.g. `VTuberClipper_2.2_beta.zip`) from the Releases page, unzip the whole folder anywhere, double-click `VTuberClipper.exe`. SmartScreen: *More info → Run anyway*. To update, unzip `VTuberClipper_update_<version>.zip` and drag its `app` folder over your own (see [docs/HOW_TO_UPDATE_2.2.txt](docs/HOW_TO_UPDATE_2.2.txt)). The portable build bundles Python, ffmpeg and yt-dlp (about 600 MB) so it is not stored in git; how it is put together is in [docs/PORTABLE_BUILD.md](docs/PORTABLE_BUILD.md).
 
 **From source:**
 
@@ -44,7 +44,7 @@ Python 3.11 with Tk is what the Windows build uses. Speech-to-text (faster-whisp
 | --- | --- |
 | `app/` | The program: the engine (`streamclip.py`), the window (`streamclip_app.py` + `vc20ui.py`, `vc21ui.py`, `vc22ui.py`), the finder (`vcsense.py` sound detectors, `vcsmart.py` rules / lexicons / picking), helpers (`vcmore.py`, `vctools.py`, `vcnew.py`, `vcfx.py`, `vcpost.py`, `vcouts.py`, `vcpresets.py`, `vcpreview.py`, `vcemoji.py`, `vcemotes.py`) and its pictures, sounds, fonts and presets. |
 | `tests/` | Engine, helper, end-to-end and window tests. They make their own test videos; nothing is downloaded. |
-| `tools/` | `make_update_zip.py` builds the update zip. |
+| `tools/` | `make_update_zip.py` builds the update zip, `make_portable_zip.py` the full download. |
 | `docs/` | The user guide, update instructions, the 2.2 plan, how the portable build is assembled. |
 
 ## Tests
