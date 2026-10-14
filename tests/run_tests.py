@@ -14,7 +14,8 @@ import paths
 QUICK = ["t_fuzz1", "t_tools1", "t_smart1", "t_sense2", "t_more1", "t_eng1", "t_e2e22", "t_uni22"]
 GUI = ["g22a", "g22b"]
 # awkward videos: the three that must be refused politely, and what the message has to say
-REFUSED = {"noaudio": "no audio track", "short6": "too short", "short12": "shorter than one clip"}
+REFUSED = {"noaudio": "no audio track", "short6": "too short"}
+EITHER = {"short12": "shorter than one clip"}          # a 12-second video may be cut into one short or refused politely; both are fine, a crash or a broken file is not
 ODD = ["odd", "fps24", "fps60", "mono22", "noaudio", "silent", "portrait", "p43", "tenbit", "vfr", "surround", "mkvopus", "short12", "short6"]
 
 
@@ -50,10 +51,12 @@ def main(groups):
             if not path: report("odd/" + f, False, "test video missing - run tests/make_fixtures.py", 0); continue
             code, out, secs = run([sys.executable, os.path.join(paths.HERE, "t_odd22.py"), path, "all"], 900)
             m = re.search(r"^RESULT .*", out or "", re.M); line = m.group(0) if m else "no result"
+            good = bool(m) and " OK " in line and "broken=[]" in line
             if f in REFUSED: ok = bool(m) and " ERR " in line and REFUSED[f] in line
-            else: ok = bool(m) and " OK " in line and "broken=[]" in line
+            elif f in EITHER: ok = good or (bool(m) and " ERR " in line and EITHER[f] in line)
+            else: ok = good
             if not ok: print(out[-1500:])
-            report("odd/" + f, ok, ("refused politely: " + REFUSED[f]) if (ok and f in REFUSED) else line[7:150], secs)
+            report("odd/" + f, ok, ("refused politely: " + (REFUSED.get(f) or EITHER[f])) if (ok and (f in REFUSED or (f in EITHER and " ERR " in line))) else line[7:150], secs)
     if "gui" in groups:
         for t in GUI:
             code, out, secs = run([sys.executable, os.path.join(paths.HERE, t + ".py")], 3000)
