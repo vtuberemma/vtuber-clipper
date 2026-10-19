@@ -430,26 +430,41 @@ def watch_check(self, manual=False):
 
 
 # ================================================================ Tools window
+# the pages of the Tools window, in groups: (group key, group title, [(page key, page title, builder)]). Later versions add their groups by extending this list.
+TOOL_GROUPS = []
+
+
 @method
 def open_toolbox(self, tab=None):
     w = self.tools_win
     try:
         if w is not None and w.winfo_exists():
-            w.lift()
-            if tab in self.tools_pages: self.tools_nb.select(self.tools_pages[tab])
+            w.lift(); self.tools_show(tab)
             return
     except tk.TclError: pass
     w = self.tools_win = tk.Toplevel(self); w.title("Tools 🧰"); w.configure(bg=self.t["bg"]); w.transient(self)
-    A.center_over(w, self, 800, min(660, max(480, self.winfo_height() - 60))); w.minsize(700, 460)
+    A.center_over(w, self, 820, min(700, max(480, self.winfo_height() - 60))); w.minsize(700, 480)
     nb = self.tools_nb = ttk.Notebook(w); nb.pack(fill="both", expand=True, padx=10, pady=10)
-    self.tools_pages = {}
-    for key, title, fn in (("watch", "👀 Watch folder", _tp_watch), ("health", "🩺 Health", _tp_health), ("clean", "🧹 Clean up", _tp_clean), ("space", "💾 Space", _tp_space),
-                           ("looks", "🎨 Looks", _tp_looks), ("tags", "# Hashtags", _tp_tags), ("vocab", "📚 My words", _tp_vocab), ("sheet", "📄 Post sheet", _tp_sheet)):
-        f = ttk.Frame(nb, padding=16); nb.add(f, text=title); self.tools_pages[key] = f
-        try: fn(self, f)
-        except Exception:
-            log_err(); ttk.Label(f, text="This page could not be built - see the log file.", style="Mute.TLabel").pack(anchor="w")
-    if tab in self.tools_pages: nb.select(self.tools_pages[tab])
+    self.tools_pages, self.tools_groups = {}, {}
+    for gkey, gtitle, pages in TOOL_GROUPS:
+        gf = ttk.Frame(nb); nb.add(gf, text="  " + gtitle + "  ")
+        inner = ttk.Notebook(gf); inner.pack(fill="both", expand=True, padx=4, pady=(8, 4)); self.tools_groups[gkey] = (gf, inner)
+        for key, title, fn in pages:
+            f = ttk.Frame(inner, padding=16); inner.add(f, text=title); self.tools_pages[key] = f
+            try: fn(self, f)
+            except Exception:
+                log_err(); ttk.Label(f, text="This page could not be built - see the log file.", style="Mute.TLabel").pack(anchor="w")
+    self.tools_show(tab)
+
+
+@method
+def tools_show(self, tab):
+    """Select a page of the Tools window (and the group it is in)."""
+    if tab not in self.tools_pages: return
+    for gkey, gtitle, pages in TOOL_GROUPS:
+        if any(k == tab for k, _, _ in pages):
+            gf, inner = self.tools_groups[gkey]
+            self.tools_nb.select(gf); inner.select(self.tools_pages[tab]); return
 
 
 def _intro(self, f, text):
@@ -871,6 +886,11 @@ def compare_show(self, outs, picks):
 
 
 # ================================================================ My clips: search, tags, review, remake, where from
+TOOL_GROUPS.extend([
+    ("pc", "💻 My PC", [("watch", "👀 Watch folder", _tp_watch), ("health", "🩺 Health", _tp_health), ("clean", "🧹 Clean up", _tp_clean), ("space", "💾 Space", _tp_space)]),
+    ("looks", "🎨 Looks & words", [("looks", "🎨 Looks", _tp_looks), ("tags", "# Hashtags", _tp_tags), ("vocab", "📚 My words", _tp_vocab), ("sheet", "📄 Post sheet", _tp_sheet)])])
+
+
 @wraps("apply_theme")
 def _w_theme(orig):
     def apply_theme(self):
@@ -893,6 +913,7 @@ def _retheme(self):
             try:
                 stack.extend(w.winfo_children())
                 if w.winfo_class() == "Text": w.configure(bg=t["entry"], fg=t["fg"], insertbackground=t["fg"])
+                elif w.winfo_class() == "Listbox": w.configure(bg=t["entry"], fg=t["fg"], selectbackground=t["accent"], selectforeground=t["on"])
             except tk.TclError: pass
 
 

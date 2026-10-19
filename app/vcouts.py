@@ -8,7 +8,7 @@ NAME_TOKENS = {"video": "the VOD's file name", "n": "clip number (1, 2, 3...)", 
 DEFAULT_PATTERN = "{video}_short{n}"
 # files that belong to a clip (everything that sits next to the .mp4 and shares its name). The picture endings are no longer made, but are still
 # cleaned up so a clip from an earlier 2.0 beta never leaves files behind when it is deleted.
-SIDE_ENDINGS = ("_cover.jpg", "_cover_b.jpg", "_cover_c.jpg", "_best.gif", "_quote.png", "_transcript.txt", ".srt", ".vtt", ".txt")
+SIDE_ENDINGS = ("_cover.jpg", "_cover_b.jpg", "_cover_c.jpg", "_best.gif", "_quote.png", "_transcript.txt", "_posts.txt", "_alt.txt", "_check.txt", ".gif", ".mp3", ".m4a", ".srt", ".vtt", ".txt")
 
 
 def sanitize(s, maxlen=90):
@@ -45,7 +45,12 @@ def delete_clip_files(mp4):
         except OSError: pass
     d = os.path.dirname(str(mp4))
     try:
-        if os.path.basename(os.path.dirname(d)) in ("Shorts", "Recaps", "Twitter") and not os.listdir(d): os.rmdir(d)
+        for _ in range(2):                                   # 'one folder per VOD' and 'one folder per day' (2.3) are removed when they are empty
+            if os.path.basename(os.path.dirname(d)) in ("Shorts", "Recaps", "Twitter") or os.path.basename(os.path.dirname(os.path.dirname(d))) in ("Shorts", "Recaps", "Twitter"):
+                if os.path.isdir(d) and not os.listdir(d): os.rmdir(d)
+                else: break
+            else: break
+            d = os.path.dirname(d)
     except OSError: pass
     return n
 

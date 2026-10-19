@@ -1,0 +1,23 @@
+HOW TO UPDATE VTuber Clipper to 2.3 BETA  (about 30 seconds)
+
+ 1. Close VTuber Clipper.
+ 2. Unzip this file. You get a folder called "app" and two text files.
+ 3. Open your VTuberClipper folder (the one with VTuberClipper.exe in it).
+ 4. Drag the "app" folder from this zip into it and choose "Replace the files in the destination" (Copy and Replace).
+    Files that change: streamclip.py, streamclip_app.py, vc20ui.py, vc21ui.py, vc22ui.py, vcmore.py, vcouts.py, vctools.py and CREDITS.txt.
+    New files: vc23.py, vc23ui.py, vcclues.py, vcmedia.py, vcnet.py, vcpipe.py, vcsafe.py and vcshare.py.
+    The pictures, sounds and emojis are the same as in 2.2.
+    Your settings, saved styles, transcripts, music, emotes, your clips and the list of clips you kept are NOT touched - they live in your user folder.
+ 5. Start VTuberClipper.exe. A "What's new" window shows once.
+
+From 2.3 on you can also update from inside the app: Settings -> About -> "Check for updates", or Tools -> Updates -> "Install a zip I have..." and choose
+this zip. The app checks the zip, keeps a copy of every file it replaces and can undo it (Tools -> Updates -> "Undo the last update").
+(You need 2.3 or newer for that; to get to 2.3 the first time, use the steps above.)
+
+What is new in 2.3 is listed at the top of README.txt: more clues for finding the moment, a privacy guard with your own private words, clip and flash checks,
+reports and texts, download options (only a part of a VOD, a speed limit, a cookies file), snapshots of your settings, an update checker with a safe installer,
+50 new things in all - and the list of bugs that were found and fixed. The README also says plainly how far the privacy guard and the finders can be trusted.
+Almost everything new is OFF until you switch it on. These are ON because they only protect you: the flash check, the clip check, the disk-space guard,
+the privacy guard in "warn" mode, and the extra finding clues (untick "Smart finding (recommended)" for the old way of finding clips).
+The older updates (1.6 - 2.2) are included, so you can update straight from 1.5.
+If something doesn't start, press Details in the app, or look at %USERPROFILE%\VTuberClipper_log.txt.

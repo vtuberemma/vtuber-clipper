@@ -122,6 +122,10 @@ try:                                                        # 2.2: smarter findi
     import vcmore as _vm
     OPTS.update(_vm.DEFAULTS)
 except Exception: _vm = None
+try:                                                        # 2.3: more clues, clean edges, privacy, checks, files (see vc23.DEFAULTS)
+    import vc23 as _v23
+    OPTS.update(_v23.DEFAULTS)
+except Exception: _v23 = None
 
 
 # 2.0 "Polish" options: they shape one finished video (picture, overlays, voice). X videos get them; Recaps get the picture and voice ones only.
@@ -201,6 +205,9 @@ def get_opts(o=None):
     if _vm:
         try: _vm.clean_opts(d)
         except Exception: d.update(_vm.DEFAULTS)
+    if _v23:
+        try: _v23.clean_opts(d)
+        except Exception: d.update(_v23.DEFAULTS)
     return d
 
 
@@ -609,7 +616,7 @@ SMART_W = dict(laugh=2.4, scream=2.0, setup=1.1, sing=1.4, chat=2.0, w_laugh=1.0
 def smart_boost(src, words, rms, r50, n, o):
     """2.2: extra score per second from the laugh / scream / singing / quiet-beat detectors, the lists of reaction words and (when there is one) the chat log.
     Also keeps the curves in AN so the clip chooser can name the kind of each moment. Returns zeros when switched off or when something is missing."""
-    AN["curves"] = AN["marks"] = AN["chat"] = None
+    AN["curves"] = AN["marks"] = AN["chat"] = AN["clues"] = None
     if o is not None and not o.get("smart", True): return np.zeros(n)
     try:
         import vcsmart, vcsense
@@ -630,9 +637,17 @@ def smart_boost(src, words, rms, r50, n, o):
         b += (SMART_W["w_laugh"] * np.minimum(2, mk["laugh"] + mk["scream"]) + SMART_W["w_fail"] * np.minimum(2, mk["fail"] + mk["win"] + mk["scare"])
               + SMART_W["w_hype"] * np.minimum(2, mk["hype"]))
         AN["curves"], AN["marks"], AN["chat"] = cur or None, mk, chat
+        try:                                                                       # 2.3: !clip commands, milestones, chat talk, bilingual, rapid-fire, panic repeats, build-up, BRB parts
+            import vcclues
+            cl = vcclues.compute(words, AN.get("rmsz"), n, o, vcclues.chat_messages(path) if path else [], AN.get("quiet"))
+            AN["clues"] = cl
+            b = b + np.asarray(cl["boost"][:n], float)
+            if cl["cmds"]: print(f"Viewers asked for a clip {sum(c for _, c in cl['cmds'])} time(s) in chat: {len(cl['cmds'])} moment(s) will be looked at first.")
+            if cl["zones"]: print(f"Leaving out {len(cl['zones'])} break / goodbye part(s) of the video.")
+        except Exception as e: print("(extra clues skipped:", str(e)[:100] + ")")
         return np.convolve(b, np.ones(3) / 3, "same")
     except Exception as e:
-        print("(smart sound detectors skipped:", str(e)[:100] + ")"); AN["curves"] = AN["marks"] = AN["chat"] = None
+        print("(smart sound detectors skipped:", str(e)[:100] + ")"); AN["curves"] = AN["marks"] = AN["chat"] = AN["clues"] = None
         return np.zeros(n)
 
 
@@ -849,11 +864,16 @@ def pick_events(sc, words, a, b, k, sep=6.0, strength=False):
     return ev if strength else [t for t, _ in ev]
 
 
+def is_cens(w, censor):
+    """True when a word is bleeped / starred: it is on the bleep list, or the 2.3 privacy guard marked it ('priv')."""
+    return clean(w["w"]) in censor or bool(w.get("priv"))
+
+
 def first_words(words, t, n=6, censor=frozenset()):
     out = []
     for w in words:
         if w["start"] >= t:
-            out.append("*" * len(w["w"]) if censor and clean(w["w"]) in censor else w["w"])
+            out.append("*" * len(w["w"]) if is_cens(w, censor) else w["w"])
             if len(out) == n: break
     return " ".join(out)
 
@@ -878,7 +898,11 @@ def pick_hook(words, segs, s0, k, o, censor=frozenset(), kind=None):
             cw, _ = remap(words, segs)
             q = vcpost.analyze(cw)["quote"] if cw else ""
             q = vcpost.tidy_quote(q.rstrip("\u2026").rstrip(" ,;:-"), 40) if q else ""
-            if len(q.split()) >= 3: return censor_text(q, censor)
+            if len(q.split()) >= 3:
+                try:
+                    import vcsafe; q = vcsafe.scrub_text(q, o)                    # 2.3: no phone number / address / private word in the big title
+                except Exception: pass
+                return censor_text(q, censor)
         except Exception: pass
         if kind:                                   # 2.2: no good line was said, so a title that fits the kind of clip
             try:
@@ -1172,7 +1196,13 @@ Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text
     upper = style != "line" and not cjk
     join = "" if cjk else " "
     case = o["cap_case"] if cx else "auto"
-    mask = lambda w: "*" * len(w["w"]) if clean(w["w"]) in censor else (_vm.apply_case(san(w["w"]), case, upper) if cx else (san(w["w"]).upper() if upper else san(w["w"])))
+    mask = lambda w: "*" * len(w["w"]) if is_cens(w, censor) else (_vm.apply_case(san(w["w"]), case, upper) if cx else (san(w["w"]).upper() if upper else san(w["w"])))
+    if o.get("cap_feel") and style != "type":                          # 2.3: laugh words yellow, scream words red, win words green ... (not in typewriter captions: letters are counted there)
+        try:
+            import vcmedia
+            _m0 = mask
+            mask = lambda w: _m0(w) if is_cens(w, censor) else vcmedia.feel_wrap(_m0(w), w["w"])
+        except Exception as e: print("Feeling colours skipped:", str(e)[:80])
     NW = o["cap_words"] if cx else 0                                   # 0 = automatic
     rb = _vm.rainbow_colors(hi_c, txt_c) if (cx and o["cap_rainbow"]) else None
     if rb: c1r = lambda i: "{\\1c" + rb[i % len(rb)].replace("&H00", "&H") + "&}"
@@ -1496,8 +1526,13 @@ def reframe(layout, cam, W, H, pip_pos="br", o=None, ex=None, safe=(0.0, 0.0, 0.
                f"[{ex['bgimg']}:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,format=yuv420p,loop=loop=-1:size=1:start=0,setpts=N/({FPS}*TB)[bg]")
         return (f"[v]scale={W}:{H}:force_original_aspect_ratio=decrease:force_divisible_by=2[fg];{src};"
                 f"[bg][fg]overlay=(W-w)/2:(H-h)/2:shortest=1[vv]")
-    sw, sh = max(2, W // 10 * 2), max(2, H // 10 * 2)          # blur a tiny copy: fast and just as smooth
-    return (f"[v]split[b][f];[b]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},scale={sw}:{sh},boxblur=5:2,scale={W}:{H}[bg];"
+    try:                                                       # 2.3: blur strength and brightness of the background ("normal" and 0 are exactly what 2.2 did)
+        import vcmedia
+        chain = vcmedia.blur_chain(o.get("bg_blur", "normal"), W, H, o.get("bg_dim", 0))
+    except Exception:
+        sw, sh = max(2, W // 10 * 2), max(2, H // 10 * 2)      # blur a tiny copy: fast and just as smooth
+        chain = f"scale={sw}:{sh},boxblur=5:2,scale={W}:{H}"
+    return (f"[v]split[b][f];[b]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},{chain}[bg];"
             f"[f]scale={W}:{H}:force_original_aspect_ratio=decrease:force_divisible_by=2[fg];[bg][fg]overlay=(W-w)/2:(H-h)/2[vv]")
 
 
@@ -1942,7 +1977,7 @@ def render(src, segs, words, out, layout="blur", cam=None, captions=True, censor
         if captions and o["cap_emoji"] and owords:       # little emoji pictures that pop up above the caption on strong feelings (lol, love, dead, fire...)
             try:
                 import vcemoji
-                ev_em = vcemoji.pick([w for w in owords if clean(w["w"]) not in censor], dur, I)
+                ev_em = vcemoji.pick([w for w in owords if not is_cens(w, censor)], dur, I)
                 if eit: ev_em = [(t_, h_) for t_, h_ in ev_em if not any(x["t"] - .3 <= t_ <= x["t"] + x["hold"] for x in eit)]       # a chibi is already showing that feeling
             except Exception as e:
                 ev_em = []; print("Emojis skipped:", str(e)[:100])
@@ -2039,7 +2074,9 @@ def render(src, segs, words, out, layout="blur", cam=None, captions=True, censor
             except Exception as e: print("Buddy skipped:", str(e)[:100])
         if o["logo"] and os.path.isfile(o["logo"]):          # logo / watermark in a corner
             li = reg(["-i", os.path.abspath(o["logo"])]); lw = max(16, int(W * o["logo_size"] / 100) // 2 * 2); pad = int(min(W, H) * .04)
-            g.append(f"[{li}:v]format=rgba,scale={lw}:-2,colorchannelmixer=aa=0.92[lg]")
+            try: import vcmedia; la_ = vcmedia.logo_alpha_filter(o.get("logo_alpha", 92))
+            except Exception: la_ = "colorchannelmixer=aa=0.92"
+            g.append(f"[{li}:v]format=rgba,scale={lw}:-2,{la_}[lg]")
             lx = f"{pad}" if o["logo_pos"] in ("tl", "bl") else f"W-w-{pad + (int(W * safe[1]) if o['logo_pos'] == 'br' else 0)}"
             ly = f"{pad + int(H * safe[2])}" if o["logo_pos"] in ("tl", "tr") else f"H-h-{pad + bh + int(H * safe[0])}"
             if o.get("hop_logo") and _vm and dur > 8:                # 2.2: the logo moves to another corner every few seconds (harder to crop out, easy to spot)
@@ -2048,15 +2085,30 @@ def render(src, segs, words, out, layout="blur", cam=None, captions=True, censor
             else: g.append(f"[{cur}][lg]overlay=x={lx}:y={ly}:format=auto[xlg]")
             cur = "xlg"
         if fx.get("bar"):                     # retention progress bar
-            g.append(f"color=c=0x{acc}:s={W}x{bh}:r={FPS}:d={dur:.2f}[bar]")
-            g.append(f"[{cur}][bar]overlay=x='-w+w*t/{dur:.3f}':y={H - bh}:shortest=1[xbar]"); cur = "xbar"
+            by_, bth_ = H - bh, bh
+            try:                                                  # 2.3: top or bottom edge, own thickness
+                import vcmedia
+                by_, bth_ = vcmedia.bar_geometry(H, RH, o.get("bar_pos", "bottom"), o.get("bar_thick", 14))
+            except Exception: pass
+            g.append(f"color=c=0x{acc}:s={W}x{bth_}:r={FPS}:d={dur:.2f}[bar]")
+            g.append(f"[{cur}][bar]overlay=x='-w+w*t/{dur:.3f}':y={by_}:shortest=1[xbar]"); cur = "xbar"
         FD = vcfx.fade_seconds(o["fade"], dur) if vcfx else 0.0
         g.append(f"[{cur}]" + (f"fade=t=in:st=0:d={FD:.2f},fade=t=out:st={max(0, dur - FD):.3f}:d={FD:.2f}" if FD else "null") + "[vf]")
-        cens = [(w["start"], w["end"]) for w in owords if clean(w["w"]) in censor]
+        cens = [(w["start"], w["end"]) for w in owords if is_cens(w, censor)]
         VC = ("," + VOICE_CLEAN) if o["voice_clean"] else ""
         if vcfx: VC += vcfx.voice_chain(o["voice_eq"], o["voice_fx"])
+        try:                                              # 2.3: noise gate, de-esser (before the compressor, so the compressor does not lift the noise)
+            import vcmedia
+            VC += vcmedia.audio_gate(o, FF, NOWIN)
+        except Exception as e: print("Gate / de-esser skipped:", str(e)[:80])
         if _vm: VC += _vm.audio_extras(o)                 # 2.2: hush the background hiss / tame loud screams
         music = pick_music(o["music"])
+        if o.get("music_mood") and o.get("mood_kind") and o["music"]:               # 2.3: a sub-folder of your music folder named after the mood of the clip (hype, funny, chill, sad, spooky, cute...)
+            try:
+                import vcmedia
+                mm_ = vcmedia.mood_pick(o["music"], o["mood_kind"], lambda d_, ex_=(): pick_music(d_, ex_), o.get("mood_feel", ""))
+                if mm_ is not None: music = mm_; print("Music by mood:", (os.path.basename(os.path.dirname(mm_)) + " / " + os.path.basename(mm_)) if mm_ else "none (a song is playing)")
+            except Exception as e: print("Music by mood skipped:", str(e)[:80])
         if cens:
             e = "+".join(f"between(t,{a:.3f},{b:.3f})" for a, b in cens)
             g.append(f"[a0]aresample=48000{VC},volume='1-min(1,{e})':eval=frame[am]")
@@ -2245,23 +2297,38 @@ def why_block(kind, why):
     except Exception: return ""
 
 
+def short_kit(owords, o, a, k=0, dur=None, kind=None):
+    """The post kit (titles, descriptions, hashtags for every app) of one short. 2.3: words the privacy guard flagged are starred first, and hashtags that name a private word are dropped."""
+    import vcpost
+    extra = [t.strip("#") for t in re.split(r"[\s,]+", o["tags"]) if t.strip("#")]
+    if kind:
+        try:
+            import vcsmart
+            extra += [t for t in vcsmart.EXTRA_TAGS.get(kind, []) if t.lower() not in {x.lower() for x in extra}]
+        except Exception: pass
+    try:                                                   # 2.2: the creator's own hashtag bank (always / per game / per kind of clip)
+        import vctools
+        have_ = {x.lower() for x in extra}
+        extra += [t for t in vctools.bank_tags(o["game"], kind or "") if t.lower() not in have_]
+    except Exception: pass
+    safe_w = [({**w, "w": "*" * len(w["w"])} if (w.get("priv") or w.get("pwarn")) else w) for w in owords]
+    kit = vcpost.make_kit(safe_w, game=o["game"], channel=o["channel"], handle=o["handle"], hint=o["hint"], name_hint=Path(a.video).stem, seed=k, dur=dur, extra=extra, kind=kind)
+    try:
+        import vcsafe
+        for plat in ("youtube", "tiktok", "reels"):
+            hs = kit.get(plat, {}).get("hashtags")
+            if hs: kit[plat]["hashtags"] = [h for h in hs if vcsafe.scrub_text(h, o) == h]
+        kit["titles"] = [vcsafe.scrub_text(t, o) for t in kit["titles"]]
+    except Exception: pass
+    return kit
+
+
 def short_post(owords, o, tags, a, k=0, hype=None, dur=None, kind=None, why=None):
     """The text file saved next to each short: title ideas for every platform, a YouTube description, hashtags that fit each app.
     Falls back to the simple v1.2 text if the writer can't run. 2.2: also says what kind of moment it is and why it was picked."""
     try:
         import vcpost
-        extra = [t.strip("#") for t in re.split(r"[\s,]+", o["tags"]) if t.strip("#")]
-        if kind:
-            try:
-                import vcsmart
-                extra += [t for t in vcsmart.EXTRA_TAGS.get(kind, []) if t.lower() not in {x.lower() for x in extra}]
-            except Exception: pass
-        try:                                                   # 2.2: the creator's own hashtag bank (always / per game / per kind of clip)
-            import vctools
-            have_ = {x.lower() for x in extra}
-            extra += [t for t in vctools.bank_tags(o["game"], kind or "") if t.lower() not in have_]
-        except Exception: pass
-        kit = vcpost.make_kit(owords, game=o["game"], channel=o["channel"], handle=o["handle"], hint=o["hint"], name_hint=Path(a.video).stem, seed=k, dur=dur, extra=extra, kind=kind)
+        kit = short_kit(owords, o, a, k, dur, kind)
         txt = vcpost.kit_text(kit, hype)
     except Exception: txt = post_text(owords, o, tags, style_hashtags(a.style, a.fx), k, hype)
     blk = why_block(kind, why)
@@ -2338,7 +2405,7 @@ def srt_time(t):
 
 def write_srt(owords, path, censor=frozenset()):
     """Subtitle file (.srt) for the finished clip - handy for YouTube, TikTok or other editors."""
-    ws = [{**w, "w": "*" * len(w["w"]) if clean(w["w"]) in censor else w["w"]} for w in owords]
+    ws = [{**w, "w": "*" * len(w["w"]) if is_cens(w, censor) else w["w"]} for w in owords]
     cjk = bool(ws) and sum(is_cjk(w["w"]) for w in ws) / len(ws) > .3
     out = []
     phs = phrases(ws, 7, 20 if cjk else 52, cjk=cjk)
@@ -2353,7 +2420,7 @@ def write_srt(owords, path, censor=frozenset()):
 def write_transcript(ow, mp4, censor=frozenset(), dur=0.0):
     """2.0: what was said in a clip, as a readable text file with times (<name>_transcript.txt) and as a web-video subtitle file (<name>.vtt)."""
     import vcouts
-    ws = [{**w, "w": "*" * len(w["w"]) if clean(w["w"]) in censor else w["w"]} for w in ow if str(w.get("w", "")).strip()]
+    ws = [{**w, "w": "*" * len(w["w"]) if is_cens(w, censor) else w["w"]} for w in ow if str(w.get("w", "")).strip()]
     if not ws: return
     cjk = sum(is_cjk(w["w"]) for w in ws) / len(ws) > .3; join = "" if cjk else " "
     phs = phrases(ws, 12, 30 if cjk else 80, cjk=cjk)
@@ -2375,8 +2442,26 @@ def style_hashtags(style, fx):
     return t
 
 
+def mark_private(words, o, say=True):
+    """2.3 privacy guard: words that give away an e-mail, phone number, address, link, a real name slip or one of your private words get a 'priv' flag
+    (bleeped and starred everywhere) or, in 'warn' mode for patterns, a 'pwarn' flag (only reported). Old flags are cleared first, so edited captions are checked again."""
+    try:
+        import vcsafe
+        base = [({k: v for k, v in w.items() if k not in ("priv", "pwarn")} if ("priv" in w or "pwarn" in w) else w) for w in words]
+        out, rep_ = vcsafe.mark_words(base, o)
+    except Exception as e:
+        print("(privacy guard skipped:", str(e)[:80] + ")"); return words
+    if rep_ and say:
+        n_b = sum(1 for r in rep_ if r["bleep"])
+        print(f"Privacy guard: {len(rep_)} spot{'s' if len(rep_) != 1 else ''} found in what was said ({n_b} bleeped, {len(rep_) - n_b} only reported).")
+        for r in rep_[:6]:
+            t = int(r["start"]); print(f"   {r['label']} at {t // 3600}:{t % 3600 // 60:02d}:{t % 60:02d}" + (" - bleeped" if r["bleep"] else " - listen to it"))
+        if len(rep_) > 6: print(f"   ... and {len(rep_) - 6} more")
+    return out
+
+
 def load_words(a, o):
-    return transcribe(a.video, a.model, a.device, o["lang"], o["translate"], o["hint"], o["fixes"])
+    return mark_private(transcribe(a.video, a.model, a.device, o["lang"], o["translate"], o["hint"], o["fixes"]), o)
 
 
 # ---------------- 2.2 smart clip choosing ----------------
@@ -2388,6 +2473,11 @@ def smart_meta(words, sc, s0, e0):
         if mk is None: return {}
         kind, conf, _ = vcsmart.type_for(words, s0, e0, mk, cur, sc)
         why = vcsmart.reasons(words, s0, e0, mk, cur, sc, AN.get("onsets", ()), AN.get("chat"), kind)
+        try:
+            import vcclues
+            extra = vcclues.reasons((AN.get("clues") or {}).get("parts"), s0, e0)
+            if extra: why = (extra[:2] + [w_ for w_ in why if w_ != "Steady energy"])[:5]
+        except Exception: pass
         return dict(kind=kind, conf=conf, why=why)
     except Exception: return {}
 
@@ -2416,10 +2506,17 @@ def smart_plan(sc, words, n, lo, hi, gap, style, prof, o, made=(), ra=0, rb=None
     """Choose the moments of a Shorts run the 2.2 way. Every strong window gets a KIND, its own length (when "smart length" is on), a clean start
     (no "hey guys welcome back"), a story that starts and ends on its sentences, an end right after the payoff (when asked) - then the best ones are
     picked one by one, so the same kind of clip or the same joke does not fill the whole list. Returns (jobs [(start, end, segments)], metas, skipped)."""
-    import vcsmart
+    import vcsmart, vcclues
     mk, cur = AN.get("marks"), AN.get("curves")
     mid = int((lo + hi) / 2); use_len = bool(o.get("smart_len")); use_taste = bool(tst) and bool(o.get("use_taste"))
     ranked = top_windows(sc, mid, max(1, mid // 2), prof, ra, rb)
+    cl = AN.get("clues") or {}
+    zones = cl.get("zones") or []
+    cmds = [(t_, c_) for t_, c_ in (cl.get("cmds") or []) if ra - 5 <= t_ <= (rb if rb else len(sc)) + 5]
+    forced = []                                                  # 2.3: moments viewers asked for with !clip are always looked at, even when the energy score alone would not rank them
+    for t_, c_ in cmds:
+        i_ = int(max(ra, min(t_ - .4 * mid, (rb if rb else len(sc)) - mid - 1)))
+        if i_ >= 0: forced.append((wscore(sc, i_, mid) + 1.0 + .5 * min(c_, 4), i_))
 
     def build(score, i):
         kind, conf, _ = vcsmart.type_for(words, i, i + mid, mk, cur, sc)
@@ -2446,15 +2543,24 @@ def smart_plan(sc, words, n, lo, hi, gap, style, prof, o, made=(), ra=0, rb=None
             if ne < e0 - .5:
                 sg = keep_segments(s0, ne, words, gap_k, quiet=qv)
                 if kept_len(sg) >= max(8.0, lo_k * .8): e0, segs = ne, sg
+        if zones and vcclues.zones_overlap(s0, e0, zones) > .4: return None            # 2.3: a BRB / intermission / goodbye part
+        if o.get("lead_trim", True) or o.get("tail_trim", True):                       # 2.3: open on action, clean ending
+            try:
+                sg2, ca, cb = vcclues.trim_edges(segs, words, AN.get("quiet"), bool(o.get("lead_trim", True)), bool(o.get("tail_trim", True)), min_len=max(8.0, lo_k * .8))
+                if ca or cb: segs, s0, e0 = sg2, sg2[0][0], sg2[-1][1]
+            except Exception: pass
         return dict(score=score, rat=rating(score), s0=s0, e0=e0, segs=segs, kind=kind, conf=conf)
     pool, done, skipped, got, limit = [], 0, 0, [], max(14, n * 6)
+    for score, i in forced:
+        c = build(score, i)
+        if c and not (made and overlaps_made(c["s0"], c["e0"], made)): pool.append(c)
     while True:
         while done < min(limit, len(ranked)):
             score, i = ranked[done]; done += 1
             c = build(score, i)
             if not c: continue
             if made and overlaps_made(c["s0"], c["e0"], made): skipped += 1; continue
-            pool.append(c)
+            if not any(abs(c["s0"] - p_["s0"]) < 2 and abs(c["e0"] - p_["e0"]) < 2 for p_ in pool): pool.append(c)
         got, cnt, rest, strict = [], {}, list(pool), bool(o.get("variety", True))
         while rest and len(got) < n:
             best = None
@@ -2462,6 +2568,9 @@ def smart_plan(sc, words, n, lo, hi, gap, style, prof, o, made=(), ra=0, rb=None
                 if any(not (c["e0"] <= g["s0"] or c["s0"] >= g["e0"]) for g in got): continue
                 if strict and any(vcsmart.similar_moments(words, c["s0"], c["e0"], g["s0"], g["e0"]) for g in got): continue
                 adj = (c["rat"] + 8) * (tst["kinds"].get(c["kind"], 1.0) if use_taste else 1.0) * (0.9 ** cnt.get(c["kind"], 0) if o.get("variety", True) else 1.0)
+                req = sum(c_ for t_, c_ in cmds if c["s0"] - 2 <= t_ <= c["e0"])
+                if req: adj *= 1 + .5 * min(req, 3)                                    # 2.3: chat asked for this moment (x1.5 for one request, x2.5 for three or more)
+                if o.get("spread"): adj *= vcclues.spread_factor(c["s0"], c["e0"], [(g["s0"], g["e0"]) for g in got], vcclues.spread_zone(len(sc), n))          # 2.3: not all five in the same half hour
                 if best is None or adj > best[0]: best = (adj, c)
             if not best:
                 if strict: strict = False; continue            # not enough different moments: allow a repeat of a joke rather than fewer clips
@@ -2494,6 +2603,9 @@ def cmd_shorts(a):
     if info["h"] and OUT["res"] > info["h"]:
         print(f"Note: this VOD is {info['h']}p, so the {OUT['res']}p output is upscaled (bigger file, same detail).")
     outdir = Path(a.out) / "Shorts"
+    if o.get("day_folder"):                                                         # 2.3: one folder per day
+        try: import vcshare; outdir = outdir / vcshare.day_folder()
+        except Exception: pass
     if o["vod_folder"]: outdir = outdir / (safe_stem(a.video) or "VOD")            # 2.0: one folder per VOD
     outdir.mkdir(parents=True, exist_ok=True)
     lo = float(getattr(a, "len_min", None) or getattr(a, "len", None) or 35); hi = float(getattr(a, "len_max", None) or lo)
@@ -2532,6 +2644,16 @@ def cmd_shorts(a):
             print("Every good moment of this video was made before, so I'm making the best ones again. (Press “Start over” to clear the list.)")
             jobs, metas, _ = pick([])
     if not jobs: raise RuntimeError("This VOD is shorter than one clip - try a shorter clip length.")
+    if o.get("disk_guard", True):                          # 2.3: stop before rendering when the drive cannot hold the clips
+        try:
+            import vcsafe
+            nshape = len([x for x in str(o.get("extra_shapes", "")).split(",") if x in ASPECTS and x != o["aspect"]])
+            need = est_size_mb(sum(kept_len(j[2]) for j in jobs)) * (1 + nshape) * 1.3 + 25 * len(jobs)
+            lvl, msg, _ = vcsafe.disk_check(outdir, need)
+            if lvl == "stop": raise RuntimeError(msg)
+            if lvl == "warn": print(msg)
+        except RuntimeError: raise
+        except Exception: pass
     plan = []                                              # everything that touches the shared analysis is decided here, before any worker starts
     try: import vcsmart
     except Exception: vcsmart = None
@@ -2553,7 +2675,10 @@ def cmd_shorts(a):
         hype = rating(float(np.max(sc[a_:b_]))) if len(sc[a_:b_]) else None
         try:
             import vcouts
-            nm = vcouts.clip_name(o["name_pattern"], safe_stem(a.video), k + 1, first_words(words, s0, 5, cens), o["game"], o["channel"], s0, kind=kind or "", score=hype, length=d)
+            hook_nm = first_words(words, s0, 5, cens)
+            try: import vcsafe; hook_nm = vcsafe.scrub_text(hook_nm, o, repl="")             # 2.3: nothing private in a file name
+            except Exception: pass
+            nm = vcouts.clip_name(o["name_pattern"], safe_stem(a.video), k + 1, hook_nm, o["game"], o["channel"], s0, kind=kind or "", score=hype, length=d)
         except Exception: nm = f"{safe_stem(a.video)}_short{k + 1}"
         out = unique_path(outdir / f"{nm}.mp4")
         tags = describe(sc, words, s0, e0)["tags"] if o["post_kit"] else []
@@ -2566,7 +2691,7 @@ def cmd_shorts(a):
             if "Cancelled" in str(e): raise
             texts = {}; print("(caption check skipped:", str(e)[:80] + ")")
         if texts:
-            words = apply_caption_edits(words, [p[2] for p in plan], texts)
+            words = mark_private(apply_caption_edits(words, [p[2] for p in plan], texts), o, say=False)           # 2.3: corrected text is checked again
             print(f"Using your corrected captions for {len(texts)} clip{'s' if len(texts) != 1 else ''}.")
     eplans = emote_plans(o, words, [dict(k=k, label=f"Clip {k + 1}", start=p[0], segs=p[2], events=p[4]) for k, p in enumerate(plan)],
                          getattr(a, "emote_review", None))
@@ -2574,6 +2699,7 @@ def cmd_shorts(a):
     if a.fx.get("whoosh") and o["sfx_pack"] not in SFX_FILE_PACKS: whoosh_path()
     workers = auto_workers(len(jobs), o["aspect"])
     prog, lock, finished = [0.0] * len(jobs), threading.Lock(), [0]
+    entries = []                                           # 2.3: what was made, for the highlights report / timestamps / community message
 
     def upd(k, f):
         with lock:
@@ -2589,6 +2715,9 @@ def cmd_shorts(a):
         if kind and vcsmart: lab = " " + vcsmart.type_label(kind).lower()
         print(f"[{k + 1}/{len(jobs)}] {hms(s0)} ({d:.0f}s{lab}) -> {out.name}")
         ro = dict(o)
+        ro["mood_kind"] = kind or ""                                                           # 2.3: music folder by mood
+        try: import vcmedia; ro["mood_feel"] = vcmedia.dominant_feeling(words_in(words, segs))
+        except Exception: ro["mood_feel"] = ""
         fxk = {**a.fx, **meta["fx"]} if meta.get("fx") else a.fx
         if meta.get("cap"): ro["cap_style"] = meta["cap"]
         if meta.get("react"): ro["react_plan_t"] = meta["react"]
@@ -2605,20 +2734,35 @@ def cmd_shorts(a):
         if eplans is not None:
             its = [x for x in eplans.get(k, []) if x.get("src") not in ("pause", "loud") and os.path.isfile(str(x.get("path", "")))]
             if its: strongest = vcemotes_small(max(its, key=lambda x: x.get("score", 0))["path"])
+        shifted = [tmap(segs, e) for e in meta.get("ev_rank", [])]                    # where the big moments are inside the clip, strongest first
+        shifted = [x + rinfo.get("intro", 0.0) for x in shifted if x is not None and 1.2 <= x <= d - .8]
+        kit_c = []
+
+        def kit_fn():
+            if not kit_c: kit_c.append(short_kit(ow, o, a, k, d, kind))
+            return kit_c[0]
         if o["cover"] and not CANCEL.is_set():       # a cover picture for the upload page (YouTube / TikTok let you choose one)
             try:
-                import vcpost
-                try: kit = vcpost.make_kit(ow, game=o["game"], channel=o["channel"], handle=o["handle"], hint=o["hint"], name_hint=Path(a.video).stem, seed=k, dur=d)
+                try: kit = kit_fn()
                 except Exception: kit = dict(titles=[(o["game"] + " highlight") if o["game"] else "Stream highlight"])
                 em_path = strongest if o["emote_cover"] else ""
+                if o.get("cover_sharp", True):                                  # 2.3: the sharpest frame near that second, not a blurry one
+                    try:
+                        import vcmedia; tc = vcmedia.best_time(str(out), tc, FF, NOWIN)
+                    except Exception: pass
                 make_cover(out, out.with_name(out.stem + "_cover.jpg"), kit["titles"], o, tc, acc_, cjk=cjk_, emote=em_path)
+                if o.get("cover_alts") and not CANCEL.is_set():                 # 2.3: two more covers, other frames, other title ideas
+                    import vcmedia
+                    alts = [t_ for t_ in vcmedia.cover_candidates(str(out), [tc] + shifted[:3], FF, NOWIN, 3) if abs(t_ - tc) >= 1.0][:2]
+                    tl = list(kit["titles"])
+                    for j, t_ in enumerate(alts):
+                        rot = tl[j + 1:] + tl[:j + 1] if len(tl) > 1 else tl
+                        make_cover(out, out.with_name(f"{out.stem}_cover_{'bc'[j]}.jpg"), rot, o, t_, acc_, cjk=cjk_, emote=em_path)
             except Exception as e: print("(couldn't make the cover picture:", str(e)[:80] + ")")
         try:
             if o["transcript"] and ow: write_transcript(ow, out, cens, d)
             if o["srt"] and ow: write_srt(ow, out.with_suffix(".srt"), cens)
         except Exception as e: print("(couldn't write the subtitle file:", str(e)[:80] + ")")
-        shifted = [tmap(segs, e) for e in meta.get("ev_rank", [])]                    # where the big moments are inside the clip, strongest first
-        shifted = [x + rinfo.get("intro", 0.0) for x in shifted if x is not None and 1.2 <= x <= d - .8]
         extras = bool(o.get("slowmo") or o.get("freeze") or o.get("teaser")) and _vm is not None and bool(shifted) and not CANCEL.is_set()
         done_x = []
         if extras:
@@ -2639,11 +2783,45 @@ def cmd_shorts(a):
             if o["post_kit"]:
                 out.with_suffix(".txt").write_text(short_post(ow, o, tags, a, k, hype, d, kind, meta.get("why")), encoding="utf-8")
         except Exception as e: print("(couldn't write the title file:", str(e)[:80] + ")")
+        fin = dict(done=[], notes=[], files=[], check=[])
+        pnotes = []
+        try:
+            import vcpipe
+            pnotes = vcpipe.privacy_notes(ow)
+            for n_ in pnotes: print("   privacy:", n_)
+            title_ = ""
+            if o.get("meta_tags"):
+                try: title_ = kit_fn()["titles"][0]
+                except Exception: title_ = ""
+            fin = vcpipe.finish_clip(out, dict(o=o, ff=FF, nowin=NOWIN, words=ow, write_srt=write_srt, censor=cens, hits=shifted, kit_fn=kit_fn, kind=kind, why=meta.get("why"), dur=d,
+                                               platform="", cancelled=CANCEL.is_set, log=print, title=title_,
+                                               extra_check=[dict(level="warn", text=n_) for n_ in pnotes if "NOT bleeped" in n_]))
+            if fin["done"]: print("   finished:", ", ".join(fin["done"]))
+        except BaseException as e:
+            if "Cancelled" in str(e): raise
+            print("   (finishing steps skipped:", str(e)[:80] + ")")
+        titles_ = []
+        try: titles_ = list(kit_c[0]["titles"][:3]) if kit_c else []
+        except Exception: pass
         if _vm:
             try: _vm.ledger_add(dict(path=str(out), vod=str(a.video), start=round(s0, 2), end=round(e0, 2), kind=kind or "", conf=round(float(meta.get("conf", 0) or 0), 2), hype=hype,
                                      dur=round(float(d), 1), reasons=list(meta.get("why") or [])[:5], look=dict(style=a.style, cap=ro["cap_style"], layout=layout, aspect=o["aspect"]),
-                                     extras=done_x, tags=[], note=""))
+                                     extras=done_x, tags=[], note="", titles=titles_, notes=list(fin["notes"])[:6] + [n_ for n_ in pnotes if n_ not in fin["notes"]][:4]))
             except Exception: pass
+        if o.get("maybe_folder"):                          # 2.3: weak clips go to a "Maybe" folder, so the main folder only has the good ones
+            try:
+                import vcshare
+                dest_ = vcshare.maybe_target(str(out), hype, o.get("maybe_below", 30))
+                if dest_:
+                    newp = vcshare.move_clip(str(out), dest_)
+                    if newp:
+                        if _vm: _vm.ledger_move(str(out), newp)
+                        print(f"   hype {hype} is low - moved to the Maybe folder")
+                        out = Path(newp)
+            except Exception as e: print("   (couldn't use the Maybe folder:", str(e)[:80] + ")")
+        with lock:
+            entries.append(dict(path=str(out), start=round(s0, 2), end=round(e0, 2), dur=round(float(d), 1), kind=kind or "", hype=hype,
+                                reasons=list(meta.get("why") or [])[:5], titles=titles_, notes=list(fin["notes"])[:4]))
         if _vm and o.get("ready_dir"):
             try:
                 nrd = _vm.copy_ready(str(out), o["ready_dir"])
@@ -2670,6 +2848,14 @@ def cmd_shorts(a):
             real = [e for e in errs if "Cancelled" not in str(e)]
             raise (real or errs)[0]
     report("Rendering", 1, "Done")
+    try:
+        import vcpipe
+        vcpipe.finish_run(entries, dict(o=o, outdir=str(outdir), vod_name=safe_stem(a.video), unique=lambda p_: str(unique_path(p_)), log=print))
+    except Exception as e: print("(run files skipped:", str(e)[:80] + ")")
+    if o.get("game_memory") and not wins:
+        try:
+            import vcshare; vcshare.game_put(o["game"], dict(n=a.n, len_min=lo, len_max=hi, style=a.style, layout=a.layout if a.layout in LAYOUTS else layout))
+        except Exception: pass
     print(f"Done: {len(jobs)} shorts in {outdir}")
 
 

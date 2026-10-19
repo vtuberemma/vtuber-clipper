@@ -441,7 +441,8 @@ def clip_files_shown(self):
 @method
 def extra_files(self, f):
     """The extra files that exist next to a clip: [(label, path)]."""
-    stem = os.path.splitext(f)[0]; names = (("_cover.jpg", "🖼 Cover picture"), ("_transcript.txt", "📜 Transcript"), (".vtt", "📜 Web subtitles (.vtt)"), (".srt", "📜 Subtitles (.srt)"), (".txt", "📝 Title ideas"))
+    stem = os.path.splitext(f)[0]; names = (("_cover.jpg", "🖼 Cover picture"), ("_cover_b.jpg", "🖼 Cover picture B"), ("_cover_c.jpg", "🖼 Cover picture C"), (".gif", "🎞 GIF of the best moment"), (".mp3", "🎧 Sound only (MP3)"), (".m4a", "🎧 Sound only (M4A)"),
+                                  ("_transcript.txt", "📜 Transcript"), (".vtt", "📜 Web subtitles (.vtt)"), (".srt", "📜 Subtitles (.srt)"), ("_posts.txt", "📝 Post texts for each platform"), ("_alt.txt", "♿ Alt text"), ("_check.txt", "✅ Clip check"), (".txt", "📝 Title ideas"))
     return [(lab, stem + e) for e, lab in names if os.path.isfile(stem + e)]
 
 

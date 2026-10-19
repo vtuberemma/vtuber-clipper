@@ -1,3 +1,4 @@
 # for running the tests and building the update zip (the app itself needs only numpy + faster-whisper, see requirements-runtime.txt)
 numpy>=1.26
 pillow>=10
+yt-dlp

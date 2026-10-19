@@ -59,3 +59,13 @@ Smart finding is not a trained model. Its word lists, sound detectors and clip l
 and on published advice about short videos: articles and analyses by Opus (opus.pro), Subscribr, EasyViral, Virlo and Streams Charts about how long a short should
 be, what to put in the first seconds and how streamers' clips spread, and write-ups by Sportskeeda and Know Your Meme about well-known VTuber moments.
 Those sources' claims were not independently verified. No VTuber's video, voice or model was copied or used for training.
+
+
+SAFETY CHECKS AND LIMITS  (new in 2.3)
+--------------------------------------
+The flash safety check counts fast brightness changes in the finished picture and warns above three flashes in any second. That limit is the common rule of thumb
+from the Web Content Accessibility Guidelines (WCAG 2.3.1, "Three Flashes or Below Threshold") and from the broadcast guides it comes from (Ofcom, ITU). The program
+measures the picture itself; it is a guide, not a medical test, and I could not check it against a certified tester.
+The length limits and text limits used for TikTok, YouTube Shorts, Instagram Reels and X are the ones I know of as of 2025. The apps change them now and then.
+The update checker asks GitHub's public releases page (api.github.com, repository vtuberemma/vtuber-clipper) for the newest release number. Nothing else is sent.
+The privacy guard, the clue finders and the quality checks are rules written for this program; no outside model, service or data set is used.

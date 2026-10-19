@@ -20,6 +20,11 @@ if mode == "all":
     o.update(auto_look=True, smart_len=True, tight_end=True, use_taste=True, react_words=True, slowmo=True, freeze=True, teaser=True, extra_shapes="1:1", hop_logo=True, logo=LOGO, hush=True, tame=True,
              cap_case="upper", cap_outline="thick", cap_shadow=4, cap_words=2, cap_box=50, cap_rainbow=True, cap_style="karaoke", ready_dir=os.path.join(H, "ready"),
              name_pattern="{date} {type} {score} {len} clip {n}", range_from="0:01", handle="@tëst", cta="Follow ♡")
+    o.update(chat_cmds=True, clue_milestone=True, clue_chat=True, clue_bilingual=True, clue_fast=True, clue_repeat=True, clue_buildup=True, lead_trim=True, tail_trim=True, spread=True, skip_dead=True,   # 2.3
+             bg_blur="strong", bg_dim=-20, gate=True, deess=True, bar_pos="top", bar_thick=20, cap_feel=True, logo_alpha=50, music_mood=True,
+             soft_subs=True, meta_tags=True, scrub_meta=True, audio_copy=True, gif_clip=True, cover_alts=True, cover_sharp=True, flash_check=True, preflight=True,
+             privacy="bleep", private_words="tëst\nsakura town", report_html=True, stamps_file=True, disk_guard=True, day_folder=True, maybe_folder=True, maybe_below=95,
+             platform_texts=True, alt_text=True, community_msg=True, game_memory=True, game="Odd Game", channel="MiaVT", platform="shorts")
 out = os.path.join(H, "out")
 a = argparse.Namespace(video=vid, model="tiny", device="cpu", censor=None, gap=1.5, style="mix", opts=o, fx=fx, n=2, len_min=8, len_max=20, layout="blur", cam=None, no_silence=False, no_captions=False, out=out, windows=None)
 t = time.time()
@@ -33,5 +38,10 @@ for f in fs:
         if r.returncode or r.stderr.strip(): bad.append((os.path.basename(f), r.stderr.strip()[:80]))
     except Exception as e: bad.append((os.path.basename(f), str(e)[:60]))
 rd = glob.glob(os.path.join(H, "ready", "*")) if mode == "all" else []
+side = {}
+for f in glob.glob(out + "/**/*", recursive=True):
+    if os.path.isfile(f):
+        k = os.path.splitext(f)[1] or "none"; side[k] = side.get(k, 0) + 1
+print("FILES", dict(sorted(side.items())))
 print(f"RESULT {base} [{mode}] {res} clips={len(fs)} broken={bad} ready_files={len(rd)} {time.time() - t:.0f}s")
 shutil.rmtree(H, ignore_errors=True); shutil.rmtree(W, ignore_errors=True)

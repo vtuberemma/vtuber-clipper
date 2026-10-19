@@ -1,4 +1,4 @@
-VTuber Clipper  ♡  v2.2 BETA  - no Python install needed
+VTuber Clipper  ♡  v2.3 BETA  - no Python install needed
 ==========================================================
 1. Unzip the WHOLE folder anywhere (keep python\, app\, bin\ next to VTuberClipper.exe).
 2. Double-click VTuberClipper.exe.   (Windows SmartScreen: More info -> Run anyway.)
@@ -6,6 +6,100 @@ VTuber Clipper  ♡  v2.2 BETA  - no Python install needed
 THIS IS A BETA. It works and has been tested a lot, but it was tested on a Linux test machine, not on every Windows PC, and new things
 can still have rough edges. The window title, the banner and the Settings footer say "beta" so you always know. If something looks wrong:
 Settings -> About (or press F1) -> "Copy info for a bug report", then paste it into your message together with what you did.
+
+WHAT'S NEW IN 2.3 (beta)   - more clues for finding the moment, a privacy guard and clip checks, reports, safer downloads and updates, and a bug hunt
+  Almost everything new is OFF until you switch it on (the places are listed below). These are ON by default because they only protect you:
+  the flash safety check, the clip check, the disk-space guard, the privacy guard in "warn" mode (it only LISTS what it finds; your own private words are
+  bleeped), "open on the action / clean ending" and "skip BRB and goodbye parts", and the extra clues for finding the moment.
+
+  HOW MUCH TO TRUST THE NEW CHECKS  (please read)
+    - The privacy guard looks at the words the speech-to-text wrote down. It looks for patterns: e-mail addresses (spoken as "mia at example dot com"), phone
+      numbers, street addresses, web links and slips like "my real name is...". It only knows English phrases, it cannot hear what the speech-to-text got
+      wrong, and a name or a town that is not on YOUR private-words list looks like any other word to it. It is a safety net, not a guarantee.
+      ALWAYS give a clip a quick listen before you post it.
+    - The clue finders are rules and word lists, like Smart finding in 2.2. They were tried on sounds and made-up transcripts the test tools made,
+      not on real VTuber footage. Check what they pick.
+    - "Post texts for each app" use the limits I know of (as far as I know in 2025). The apps change them now and then - check the app if it matters.
+    - Downloading only a part of a VOD was tried on a local test stream, not on real Kick or Twitch VODs.
+    - The flash check looks at the finished picture and counts fast brightness changes (more than three a second). It is a guide based on the usual
+      broadcast and web rules, not a medical test.
+
+  THE 50 NEW THINGS
+  🔎 Finding the moment   (Shorts -> Smart finding)
+     1  Chat commands: a saved chat log where viewers typed !clip, !highlight, !marker ("clip that!") marks that moment as one to look at first.
+     2  Firsts and milestones: "first time ever", "new record", "level up", "we did it", "1000 followers" count for more.
+     3  Reading chat: moments where she reads or answers chat ("chat says...", "someone asked...") count for more. The bare word "chat" does not.
+     4  Bilingual switches: a sentence that jumps between English and Japanese / Korean / Chinese / Russian / Thai and back counts for more.
+     5  Rapid-fire excited talking (a lot more words per second than her usual pace).
+     6  Panic repeats: "no no no no", "wait wait wait".
+     7  Build-up: a moment where the sound has been climbing for ten seconds and peaks.
+     8  Open on the action: quiet seconds at the start of a clip are cut.
+     9  Clean ending: quiet seconds after the last word are cut.
+    10  Spread the clips over the whole stream, so they do not all come from one hot minute (off by default).
+    11  Skip BRB, intermission and goodbye parts, and any stretch that is quiet for 25 seconds or more.
+  🎞 Picture, sound and files   (Picture & voice / Captions / Logo & music / Posting & files)
+    12  Background blur strength (soft, normal, strong, very strong).
+    13  Background brightness (darker makes the game stand out).
+    14  Noise gate: quiets the keyboard and mouse between words (off by default).
+    15  De-esser: softens harsh S sounds (off by default).
+    16  Progress bar: top or bottom edge, and how thick.
+    17  Feeling colours: words that show a feeling get their own colour in the captions (off by default).
+    18  Logo see-through level (100 = solid).
+    19  Music by mood: put songs in sub-folders called hype, funny, chill, sad, spooky or cute inside your music folder (off by default).
+    20  Subtitles inside the mp4 as a track that can be switched on and off (off by default).
+    21  Title, channel and game written into the file's info (off by default).
+    22  Remove hidden info (such as the program that made the file) from the clip (off by default).
+    23  An MP3 of the sound next to the clip (off by default).
+    24  A GIF of the best second (off by default).
+    25  Three cover choices per clip (off by default).
+    26  The sharpest frame is picked for covers instead of a blurry one.
+  ✅ Checks   (Shorts -> Privacy & checks)
+    27  Flash safety check: looks for fast flashing in the finished picture and tells you where (on by default).
+    28  Clip check: length for the app you post to, tall picture, loudness (and a very loud moment), silent first second, black start. Written to a
+        small _check.txt next to the clip when something is worth a look (on by default). Check any clip by hand: Tools -> Clip check.
+  🔒 Privacy   (Shorts -> Privacy & checks)
+    29  Privacy guard: e-mail addresses, phone numbers, street addresses, links and "my real name is..." slips. Off / Warn me (the default: the clip's
+        check file lists what was found) / Bleep it and star it in the captions.
+    30  My private words: your real name, your town, your school, your street... They are bleeped in the sound and starred in the captions, whatever
+        the privacy setting says (unless you turn the guard off). They are never put into a shared look code.
+    31  Privacy scan: Tools -> Privacy reads a transcript or subtitle file and lists everything that looks private with the time it was said.
+    32  Private words and found patterns are also kept out of file names, titles, hooks, hashtags and post texts.
+  📝 Reports and texts   (Posting & files, and Tools -> Reports)
+    33  Highlights page: one web page with every clip of a run, its time in the VOD, why it was picked and your title ideas.
+    34  VOD timestamps for the description of the full VOD (YouTube turns lines like "12:30 Boss fight" into chapters).
+    35  Chapters: Tools -> Chapters reads the chapters stored in a video file; pick one and I only look for clips inside it.
+  ⬇ Downloads and updates   (Settings -> Downloads, the scissors button, Settings -> About, Tools -> Updates)
+    36  Download only a part of a VOD (from - to). The file name says which part. It is for the next download only.
+    37  A download speed limit and the number of pieces downloaded at once.
+    38  A cookies file for subscriber-only VODs when your browser can not be used.
+    39  Disk-space guard: stops before a run, with a clear message, when the drive is too full (on by default).
+    40  A folder for each day.
+  🧰 More in Tools
+    41  Duplicates: finds clips cut from the same moment and moves the weaker ones to a Duplicates folder (nothing is deleted).
+    42  Rename: new names from a pattern with a preview first. Title, subtitle and cover files are renamed with their clip. Nothing is overwritten.
+    43  Snapshots: a copy of your settings is kept every time you start making videos (the last 12). Go back to one if a change made your clips worse.
+        Private words and per-video fields are never touched.
+    44  Post texts for each app (TikTok, YouTube Shorts, Instagram Reels, X) within the limits I know of.
+    45  An alt-text file for every clip (a short description for people who cannot see it).
+    46  A community message draft for Discord or an X thread, listing the best clips of a run.
+    47  A "Maybe" folder: clips under a hype score you choose go there instead of among the good ones.
+    48  Update checker: Settings -> About -> Check for updates (and, if you tick it, once a day when the app starts). It only asks GitHub for the
+        newest release number; nothing is installed unless you press the button.
+    49  Safe updater: Tools -> Updates downloads (or opens a zip you already have), checks that it is an update for this program, backs up every file it
+        replaces, and can undo. Your settings, fonts, looks, clips and private words are never touched. If anything goes wrong while installing,
+        everything is put back.
+    50  Remembered per game: when you name a game, the number of clips, length and style you used last time are filled in (off by default).
+        Tools -> Games shows and forgets what is remembered.
+
+  THE BUG HUNT
+    - A damaged settings or profile file (for example a true / false switch that held the word "maybe") could stop the app from opening. It is now skipped.
+    - Found and fixed in the new code before it was released: very strong background blur could crash the render; the "very loud moment" warning could
+      never fire; the loudness and silent-start checks did nothing in the real app (a clash of settings I only saw when the screens were tested);
+      the privacy guard covered far too many words around a phone number and flagged things like "at the polka dot co-op"; the highlights report broke
+      on a clip with no time; two settings snapshots made in the same second could be listed in the wrong order; the cover picker could ask for a frame
+      past the end of a short clip.
+    - Tested with all of it on 14 awkward videos (no sound, 10-bit, portrait, very short...), hundreds of randomly broken settings, a fake GitHub for
+      the update checker and a real yt-dlp for the part downloads.
 
 WHAT'S NEW IN 2.2 (beta)   - smarter clip finding, 50 new things, and a bug hunt
   The first thing to know: Smart finding is ON by default (Shorts -> "Smart finding" tab). It changes WHICH moments get picked and how they are labelled.

@@ -36,6 +36,24 @@ for junk in (None, [], "x", 5):
 for k in vcmore.DEFAULTS: ck(f"engine knows option {k}", k in sc.OPTS)
 d = sc.get_opts(dict(range_from="1:00:00", range_to="0:30:00")); ck("range with end before start is dropped", d["range_from"] == "" and d["range_to"] == "")
 d = sc.get_opts(dict(cap_case="shout", cap_outline="huge!", extra_shapes="2:3")); ck("unknown names fall back", d["cap_case"] == "auto" and d["cap_outline"] == "normal" and d["extra_shapes"] == "")
+# 2.3 options: in the engine defaults, typed right, cleaned
+import vc23
+for k in vc23.DEFAULTS: ck(f"engine knows 2.3 option {k}", k in sc.OPTS and type(sc.OPTS[k]) is type(vc23.DEFAULTS[k]))
+d = sc.get_opts(dict(bg_dim=9999, bar_thick=-4, logo_alpha=1, maybe_below=1e9, bg_blur="x", bar_pos="x", privacy="x"))
+ck("2.3 numbers are clamped and unknown names fall back", (d["bg_dim"], d["bar_thick"], d["logo_alpha"], d["maybe_below"], d["bg_blur"], d["bar_pos"], d["privacy"]) == (50, 4, 20, 100, "normal", "bottom", "warn"), d)
+d = sc.get_opts(dict(private_words="  Mia Tanaka ,, SAKURA town;mia tanaka\n\nx\n" + "y" * 100)); ck("private words are split, lower-cased, de-duplicated and length-limited", d["private_words"] == "mia tanaka\nsakura town", repr(d["private_words"]))
+d = sc.get_opts(dict(gate="off", deess="0", cap_feel="no", soft_subs="False", gif_clip="yes")); ck("true / false words are understood", (d["gate"], d["deess"], d["cap_feel"], d["soft_subs"], d["gif_clip"]) == (False, False, False, False, True), d)
+# the download options never raise, whatever they hold
+import vcnet
+bad = 0
+for a_ in JUNK:
+    for b_ in JUNK[:12]:
+        try:
+            args, notes = vcnet.ytdlp_args(dict(dl_from=a_, dl_to=b_, dl_rate=a_, dl_frags=b_, dl_cookie_file=a_))
+            cmd, _n = vcnet.apply_download_options(["yt-dlp", "--concurrent-fragments", "4", "-o", "x.%(ext)s"], dict(dl_from=a_, dl_to=b_, dl_rate=a_, dl_frags=b_)); vcnet.name_part(cmd)
+            assert all(isinstance(x, str) for x in args) and all(isinstance(x, str) for x in notes)
+        except Exception as e: bad += 1; print("RAISED", repr(a_)[:20], repr(b_)[:20], type(e).__name__, str(e)[:80])
+ck(f"download options survive {len(JUNK) * 12} silly combinations", bad == 0, bad)
 # parse_time fuzz
 bad = 0
 for s_ in JUNK + ["1:2:3:4", "99:99:99", "-5", "1h", "m", "1:-3", "00:00:00", "0", "1,5", "１２:３０"]:

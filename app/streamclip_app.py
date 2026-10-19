@@ -8,7 +8,7 @@ from tkinter import ttk, filedialog, messagebox, colorchooser, simpledialog
 sc = None          # the engine; imported in main() so a broken install shows a message instead of silently not opening
 vp = vv = vpost = None     # presets + preview + post-writer modules (imported in main() too)
 ve = None                  # the chibi-emotes module (imported the first time it is needed, see EM())
-VERSION = "2.2"
+VERSION = "2.3"
 BETA = True                  # shown in the banner, the title bar, Settings and the README
 VER_LABEL = f"v{VERSION}" + (" beta" if BETA else "")
 HOME = os.path.expanduser("~")
@@ -60,23 +60,22 @@ MOODS = ("idle", "blink", "work", "happy", "oops")
 MUSIC_OWN = "A song or folder from somewhere else…"
 MUSIC_FOLDER = "VTuberClipper Music"          # the "My music" folder in the user folder
 WHATS_NEW = [
-    ("🧠 Smarter clip finding", "A new Smart finding tab. I now tell gameplay, reactions, talking, stories and singing apart - laughing, screaming and singing are heard in the sound, not only read in the words. "
-                               "I skip “hey guys, welcome back” openings, mix different kinds of moments, pick a length for each kind, can end right after the punchline, use your saved chat log "
-                               "and learn from the clips you keep. Every clip is labelled, and its title-ideas file says why it was picked. These are rules of thumb tuned on test sounds and on published "
-                               "advice about short videos, not a trained model - check what it picks."),
-    ("💥 Captions, sound and picture", "Captions: letter case, outline, shadow, words at a time, a box behind the words, rainbow words and big reaction words (LOL, EEEEK!, OOF, LET'S GO!). "
-                                       "Sound: tame loud screams, hush hiss. Picture: slow-mo on the biggest moment, a freeze-frame beat, a teaser of the best moment first, a logo that hops to a new corner, "
-                                       "square and landscape copies, and a ready-to-post folder. File names can use {type} {score} {len}."),
-    ("🧰 Tools (the button in the top corner)", "Watch a folder for new recordings, a health check, clean up leftovers, free up space, copy and paste a look as one line of text, compare three looks side by side, "
-                                               "your own hashtag bank, teach me your chat's slang, and save a spreadsheet (CSV) of your clips."),
-    ("🖼 My clips and Best moments", "Search your clips by title, hashtag, kind or your own tags. Review mode goes through new clips: keep, delete or later. “Make this moment again” and “Where is this from?” "
-                                     "are in ⋯ More. Fill the post planner with your newest clips in one click. Best moments lists can be saved to a file and opened another day."),
-    ("👀 Easier runs", "“Try just one first” makes one clip so you can check the look before making the rest. If the app was closed in the middle of a run, it offers to pick it up again. "
-                       "It remembers your cam box for each game."),
-    ("🐞 Fixes", "A damaged settings file can no longer crash a render, windows that are open follow a theme change, “Compare 3 looks” no longer crashes after Tools was closed, "
-              "and every new feature was tried on 15 awkward videos (no sound, 10-bit, portrait, very short…). The full list is at the top of the README."),
-    ("✨ Also", "Everything from 2.1 (Quick setup, Words & buttons, the layout designer, trim and montage, the post planner), 2.0 (the Polish tab, overlays, voice effects, extra files, little helpers) "
-                "and before (chibi emotes for story time, 26 themes, your own music, profiles, 11 sound packs) is still here."),
+    ("🔎 More clues for finding the moment", "I now also listen for !clip commands in your saved chat log, firsts and milestones, moments where you read or answer chat, switching between two languages, "
+                                            "rapid excited talking, panic repeats (“no no no no”) and build-ups to a peak. Clips can open on the action and end cleanly, be spread over the whole stream, "
+                                            "and skip BRB, intermission and goodbye parts. These are rules of thumb tuned on test sounds and made-up transcripts, not a trained model - check what it picks."),
+    ("🔒 Privacy & checks (a new tab)", "A privacy guard looks for e-mail addresses, phone numbers, street addresses, links and “my real name is…” slips; your own private words (real name, town, school…) are bleeped, "
+                                        "starred in the captions and kept out of titles, hashtags and file names. Every finished clip can be checked for length, loudness, a silent or black start and fast flashing. "
+                                        "The guard is a pattern check on the speech-to-text and only knows English phrases - it can miss things, so give a clip a quick listen."),
+    ("🎞 Picture, sound and files", "Background blur strength and brightness, a noise gate, a de-esser, the progress bar's edge and thickness, feeling colours in the captions, logo see-through level, "
+                                    "music by mood, switchable subtitles inside the mp4, file info tags, hidden-info removal, an MP3 of the sound, a GIF of the best second, three cover choices and sharpest-frame covers."),
+    ("📝 Reports and texts", "A highlights page (HTML), VOD timestamps for the description, post texts for each app within its limits (as far as I know - apps change them), an alt-text file, "
+                             "a community message for Discord or X, a folder for each day, a “Maybe” folder for weaker clips, and remembered clip count / length / style for each game."),
+    ("🧰 New in Tools", "Clip check, Duplicates, Rename with preview, Reports, Chapters, Privacy scan, Snapshots of your settings (one is saved every time you start a run) and Games."),
+    ("⬇ Downloads and updates", "Download only a part of a VOD, a speed limit, the number of pieces at once and a cookies file for subscriber-only VODs. Settings -> About can check for a newer version; "
+                                "installing one keeps a backup of every file it replaces and can be undone."),
+    ("🐞 Fixes", "Many small ones found by testing - the full list is at the top of the README."),
+    ("✨ Also", "Everything from 2.2 (Smart finding, the Tools window, search and review in My clips), 2.1 (Quick setup, Words & buttons, the layout designer, trim and montage, the post planner), "
+                "2.0 and before (chibi emotes for story time, 26 themes, your own music, profiles, 11 sound packs) is still here."),
     ("🧪 This is a beta", "VTuber Clipper is still being finished. It works and is tested, but new things can have rough edges. If something looks wrong, open "
                           "Settings → About (or press F1) and use “Copy info for a bug report”."),
 ]
@@ -95,7 +94,7 @@ MODES = [("shorts", "✂  Shorts"), ("long", "🎞  Recap"), ("moments", "🔎  
 PSUBS = [("titles", "Titles"), ("yt", "YouTube"), ("tt", "TikTok"), ("ig", "Reels"), ("x", "X")]
 X_SHAPES = {"Auto (recommended)": "auto", "Square 1:1": "1:1", "Portrait 4:5": "4:5", "Landscape 16:9": "16:9", "Tall 9:16": "9:16"}
 SUBTABS = [("quick", "Quick setup"), ("smart", "Smart finding"), ("basics", "Clips & layout"), ("text", "Words & buttons"), ("fx", "Effects"), ("captions", "Captions"),
-           ("emotes", "Chibi emotes"), ("polish", "Picture & voice"), ("extras", "Logo & music"), ("post", "Posting & files")]
+           ("emotes", "Chibi emotes"), ("polish", "Picture & voice"), ("extras", "Logo & music"), ("safe", "Privacy & checks"), ("post", "Posting & files")]
 LEFT_W, THUMB_W, THUMB_H, BANNER_H = 318, 286, 161, 88
 RECENT_MAX = 12
 ASPECT_NAMES = {"9:16": "9:16  vertical (Shorts, TikTok, Reels)", "4:5": "4:5  portrait (Instagram feed)", "1:1": "1:1  square", "16:9": "16:9  landscape"}
@@ -203,6 +202,12 @@ def fmt_size(mb):
 def site(url):
     u = url.lower()
     return "kick" if "kick.com" in u else "twitch" if "twitch.tv" in u else "youtube" if ("youtu.be" in u or "youtube.com" in u) else None
+
+
+def safe_set(var, val):
+    """Put a saved value into a Tk variable; a value the variable cannot hold (a damaged settings or profile file, e.g. "maybe" for a true / false box) is skipped."""
+    try: var.set(val)
+    except (tk.TclError, ValueError, TypeError): pass
 
 
 def open_path(p):
@@ -1181,7 +1186,7 @@ class App(tk.Tk):
         except Exception: self.cal = 1.0
         if isinstance(cfg.get("opts"), dict):
             for k, val in cfg["opts"].items():
-                if k in self.o and isinstance(val, (str, int, float, bool)): self.o[k].set(val)
+                if k in self.o and isinstance(val, (str, int, float, bool)): safe_set(self.o[k], val)
             if str(cfg["opts"].get("lang_name", "")) in sc.LANGS: self.lang_name.set(cfg["opts"]["lang_name"])
         if isinstance(cfg.get("look"), dict): self.apply_look(cfg["look"])
         else: self.apply_look(vp.BY_ID.get(self.sel_preset.get(), vp.PRESETS[0])["look"])
@@ -1212,6 +1217,7 @@ class App(tk.Tk):
         self.init20(cfg)
         self.init21(cfg)
         self.init22(cfg)
+        self.init23(cfg)
         self.build()
         for k in ("n", "lmin", "lmax", "rmin", "rmax", "split", "gcount", "model", "device", "mn", "mlo", "mhi", "speed", "parallel", "aspect", "layout"): self.v[k].trace_add("write", lambda *a: self.refresh_eta())
         self.rwhole.trace_add("write", lambda *a: (self.split_changed(), self.refresh_eta()))
@@ -1234,6 +1240,7 @@ class App(tk.Tk):
         self.bind("<F1>", lambda e: self.open_settings("about"))
         self.bind20()
         self.start22()
+        self.start23()
         self.after(1500, self.maybe_whatsnew); self.after(6000, self.plan_tick)
         self.bind_all("<MouseWheel>", self.on_wheel)
         self.apply_theme(); self.pump(); self.tick(); self.anim_tick(); self.after(600, self.enable_dnd); self.after(900, lambda: setattr(self, "tabs_ready", True))
@@ -1368,6 +1375,7 @@ class App(tk.Tk):
         ue = ttk.Entry(lr, textvariable=v["url"]); ue.grid(row=0, column=0, sticky="we"); ue.bind("<Return>", lambda e: self.download())
         self.tip(ttk.Button(lr, text="📋", width=3, command=self.paste_link), "Paste the link you copied and download it (Ctrl + Shift + V)").grid(row=0, column=1, padx=(6, 0))
         self.tip(ttk.Button(lr, text="⬇", style="Accent.TButton", width=3, command=self.download), "Download the VOD from this link").grid(row=0, column=2, padx=(4, 0))
+        self.tip(ttk.Button(lr, text="✂", width=3, command=self.dl_part_dialog), "Download only a part of the VOD (from - to)").grid(row=0, column=3, padx=(4, 0))
         mr = ttk.Frame(top); mr.pack(fill="x", pady=(4, 0))
         self.badge = tk.Canvas(mr, width=96, height=26, highlightthickness=0); self.badge.pack(side="left")
         ttk.Label(mr, text="quality", style="Mute.TLabel").pack(side="left", padx=(8, 4)); self.combo(mr, v["quality"], list(QUALITY), 6).pack(side="left")
@@ -1459,8 +1467,8 @@ class App(tk.Tk):
         self.subs = {k: ttk.Frame(P, padding=(2, 6, 2, 0)) for k, _ in SUBTABS}
         self.build_quick(self.subs["quick"]); self.build_smart(self.subs["smart"]); self.build_text(self.subs["text"])
         self.build_basics(self.subs["basics"]); self.build_fx(self.subs["fx"]); self.build_captions(self.subs["captions"])
-        self.build_emotes(self.subs["emotes"]); self.build_polish(self.subs["polish"]); self.build_extras(self.subs["extras"]); self.build_post(self.subs["post"])
-        self.build22_rows()
+        self.build_emotes(self.subs["emotes"]); self.build_polish(self.subs["polish"]); self.build_extras(self.subs["extras"]); self.build_post(self.subs["post"]); self.build_safe(self.subs["safe"])
+        self.build22_rows(); self.build23_rows()
 
     def show_sub(self):
         self.sync_view()
@@ -2556,6 +2564,7 @@ class App(tk.Tk):
         self.autowrap(ttk.Label(t3, text="for subscriber-only VODs (be logged in in that browser)", style="Mute.TLabel", justify="left"), t3, 30).grid(row=0, column=2, sticky="w")
         ttk.Checkbutton(t3, text="Update the downloader before the first download (fixes most 404 errors)", variable=self.auto_update).grid(row=1, column=0, columnspan=3, sticky="w", pady=(10, 0))
         ttk.Button(t3, text="🔄  Update downloader now", command=lambda: self.work(self.update_ytdlp)).grid(row=2, column=0, columnspan=2, sticky="w", pady=10)
+        self.dl23_rows(t3)
         # --- performance
         t4 = ttk.Frame(nb, padding=14); nb.add(t4, text="  ⚡ Performance  "); t4.columnconfigure(1, weight=1)
         ttk.Label(t4, text="Default save folder").grid(row=0, column=0, sticky="w", pady=3)
@@ -2628,7 +2637,7 @@ class App(tk.Tk):
     def apply_snapshot(self, d):
         if isinstance(d.get("opts"), dict):
             for k, val in d["opts"].items():
-                if k in self.o and isinstance(val, (str, int, float, bool)): self.o[k].set(val)
+                if k in self.o and isinstance(val, (str, int, float, bool)): safe_set(self.o[k], val)
             if str(d["opts"].get("lang_name", "")) in sc.LANGS: self.lang_name.set(d["opts"]["lang_name"])
         if isinstance(d.get("look"), dict): self.apply_look(d["look"])
         rc = d.get("recap") if isinstance(d.get("recap"), dict) else {}
@@ -2705,6 +2714,7 @@ class App(tk.Tk):
         ttk.Label(t, text="Shortcuts", font=(FONT, 10, "bold"), foreground=self.t["accent"]).pack(anchor="w", pady=(14, 2))
         import vc20ui
         self.autowrap(ttk.Label(t, text=vc20ui.SHORTCUTS, justify="left"), t, 30).pack(anchor="w")
+        self.about23_rows(t)
 
     def bug_info(self):
         import platform
@@ -3008,6 +3018,8 @@ class App(tk.Tk):
         try: d.update(self.cfg21())
         except Exception: pass
         try: d.update(self.cfg22())
+        except Exception: pass
+        try: d.update(self.cfg23())
         except Exception: pass
         try:
             d.update(awake=bool(self.awake_v.get()), lowprio=bool(self.lowprio_v.get()), recent=list(self.recent)[:RECENT_MAX], seen=self.seen_ver, music_own=self.music_own,
@@ -3964,11 +3976,18 @@ class App(tk.Tk):
         except FileNotFoundError: print("(downloader not found)\n")
         self.updated = True
 
-    def try_download(self, url, kind, out, fmt_sel, cookies):
+    def try_download(self, url, kind, out, fmt_sel, cookies, dl=None):
         cmd = ["yt-dlp", "--no-playlist", "-f", fmt_sel, "--merge-output-format", "mp4",
                "-o", os.path.join(out, "%(title).80s [%(id)s].%(ext)s"), "--retries", "10", "--fragment-retries", "10",
                "--concurrent-fragments", "4", "--newline", "--no-colors"]
         if cookies != "none": cmd += ["--cookies-from-browser", cookies]
+        if dl:                                                                  # 2.3: part of the VOD, speed limit, pieces, cookies file
+            try:
+                import vcnet
+                cmd, notes = vcnet.apply_download_options(cmd, dl)
+                cmd = vcnet.name_part(cmd)
+                for n_ in notes: print(n_)
+            except Exception: log_error(traceback.format_exc())
         text = ""
         for extra in ([["--impersonate", "chrome"], []] if kind == "kick" else [[]]):
             rc, t = self.run_cmd(cmd + extra + [url]); text += t
@@ -3985,20 +4004,22 @@ class App(tk.Tk):
         except OSError as e: return messagebox.showerror("VTuber Clipper", f"I can't use that save folder: {e}")
 
         fmt_sel, cookies, auto = QUALITY[self.v["quality"].get()], self.v["cookies"].get(), self.auto_update.get()   # read window values here, not in the worker thread
+        dl = self.dl_options()
 
         def fn():
             fresh = False
             if auto and not self.updated: self.update_ytdlp(); fresh = True
             before = set(glob.glob(os.path.join(out, "*")))
-            try: ok, text = self.try_download(url, kind, out, fmt_sel, cookies)
+            try: ok, text = self.try_download(url, kind, out, fmt_sel, cookies, dl)
             except FileNotFoundError: raise RuntimeError("The downloader (yt-dlp) is missing - keep the bin folder next to the app.")
             if not ok and not fresh:
-                print("\nFailed - updating the downloader and retrying...\n"); self.update_ytdlp(); ok, text = self.try_download(url, kind, out, fmt_sel, cookies)
+                print("\nFailed - updating the downloader and retrying...\n"); self.update_ytdlp(); ok, text = self.try_download(url, kind, out, fmt_sel, cookies, dl)
             if ok:
                 fs = [f for f in glob.glob(os.path.join(out, "*")) if f.lower().endswith((".mp4", ".mkv", ".webm", ".ts", ".mov"))]
                 new = [f for f in fs if f not in before] or fs
                 if new:
                     path = max(new, key=os.path.getmtime); print("\nSaved:", path); self.ui(lambda: self.v["video"].set(path))
+                    self.ui(lambda: (self.dl["dl_from"].set(""), self.dl["dl_to"].set("")))          # a part is for one download only
                 return
             low = text.lower(); msg = "\nDownload failed.\n"
             if "404" in text: msg += "• HTTP 404: the VOD was deleted/expired (Kick & Twitch remove VODs after days or weeks), or the link isn't a VOD page.\n  Kick: kick.com/<channel>/videos/<id>   Twitch: twitch.tv/videos/<id>\n"
@@ -4040,6 +4061,11 @@ try:
     vc22ui.install(App, sys.modules[__name__]); VC22_ERR = None
 except Exception:
     VC22_ERR = traceback.format_exc()
+try:
+    import vc23ui                                  # the 2.3 screens (Privacy & checks, new Tools pages, download and update options)
+    vc23ui.install(App, sys.modules[__name__]); VC23_ERR = None
+except Exception:
+    VC23_ERR = traceback.format_exc()
 
 
 def main():
@@ -4054,6 +4080,8 @@ def main():
         if VC21_ERR: raise RuntimeError(VC21_ERR[-300:] + "\n\nSome files of the 2.1 update are missing or damaged (vcnew.py, vc21ui.py). "
                                         "Copy the whole \"app\" folder from the update zip into your VTuberClipper folder again.")
         if VC22_ERR: raise RuntimeError(VC22_ERR[-300:] + "\n\nSome files of the 2.2 update are missing or damaged (vcsense.py, vcsmart.py, vcmore.py, vctools.py, vc22ui.py). "
+                                        "Copy the whole \"app\" folder from the update zip into your VTuberClipper folder again.")
+        if VC23_ERR: raise RuntimeError(VC23_ERR[-300:] + "\n\nSome files of the 2.3 update are missing or damaged (vc23.py, vcclues.py, vcmedia.py, vcsafe.py, vcshare.py, vcnet.py, vcpipe.py, vc23ui.py). "
                                         "Copy the whole \"app\" folder from the update zip into your VTuberClipper folder again.")
         global vp, vv, vpost
         import streamclip as engine; sc = engine

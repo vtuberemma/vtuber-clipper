@@ -213,7 +213,7 @@ def bank_tags(game="", kind="", bank=None, limit=12):
 # ================================================================ 38. look codes (paste a look to a friend)
 LOOK_PREFIX = "VTLOOK1:"
 _LOOK_KEYS = ("style", "lmin", "lmax", "gap", "layout", "aspect", "fx", "intensity", "accent", "opts")
-_SKIP_OPTS = ("logo", "music", "intro", "outro", "filler", "bg_image", "stickers", "handle", "channel", "game", "tags", "hint", "fixes")      # personal things that never travel in a look code
+_SKIP_OPTS = ("logo", "music", "intro", "outro", "filler", "bg_image", "stickers", "handle", "channel", "game", "tags", "hint", "fixes", "private_words")      # personal things that never travel in a look code
 
 
 def _plain(v):
@@ -382,7 +382,7 @@ def moments_load(path):
 
 # ================================================================ 36 / 37. clean-up and free space
 LEFTOVER_ENDS = (".part", ".ytdl", ".tmp")
-SIDECARS = ("_cover.jpg", "_transcript.txt", ".srt", ".vtt", ".txt")
+SIDECARS = ("_cover.jpg", "_cover_b.jpg", "_cover_c.jpg", "_transcript.txt", "_posts.txt", "_alt.txt", "_check.txt", ".gif", ".mp3", ".m4a", ".srt", ".vtt", ".txt")
 
 
 def _du(path):

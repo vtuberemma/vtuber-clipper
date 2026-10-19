@@ -11,8 +11,8 @@ On Linux the GUI tests need xvfb:  xvfb-run -a python tests/run_tests.py gui
 import os, re, subprocess, sys, tempfile, time
 import paths
 
-QUICK = ["t_fuzz1", "t_tools1", "t_smart1", "t_sense2", "t_more1", "t_eng1", "t_e2e22", "t_uni22"]
-GUI = ["g22a", "g22b"]
+QUICK = ["t_fuzz1", "t_tools1", "t_smart1", "t_sense2", "t_more1", "t_eng1", "t_clues1", "t_media1", "t_safe1", "t_share1", "t_net1", "t_e2e22", "t_e2e23", "t_pack23", "t_uni22"]
+GUI = ["g22a", "g22b", "g23a"]
 # awkward videos: the three that must be refused politely, and what the message has to say
 REFUSED = {"noaudio": "no audio track", "short6": "too short"}
 EITHER = {"short12": "shorter than one clip"}          # a 12-second video may be cut into one short or refused politely; both are fine, a crash or a broken file is not

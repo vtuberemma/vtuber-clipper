@@ -29,8 +29,8 @@ gone = mkclip("nokit", kit=False, ledger=False)
 # ================================================================ start-up
 A = mk(None); A.geometry("1280x900"); A.v["out"].set(OUT); pump(A, 1.5)
 ok(app.VC22_ERR is None and app.VC21_ERR is None, "the 2.2 modules loaded without error (%s)" % (app.VC22_ERR or "")[-200:])
-ok(app.VERSION == "2.2", "version 2.2")
-ok([k for k, _ in A.subbar.items] == ["quick", "smart", "text", "captions", "extras"], f"simple view: Quick setup, Smart finding, Words & buttons, Captions, Logo & music ({[k for k, _ in A.subbar.items]})")
+ok(app.VERSION >= "2.2", "version is 2.2 or newer")
+ok([k for k, _ in A.subbar.items] == ["quick", "smart", "text", "captions", "extras", "safe"], f"simple view: Quick setup, Smart finding, Words & buttons, Captions, Logo & music, Privacy & checks ({[k for k, _ in A.subbar.items]})")
 ok(set(dict(app.SUBTABS)) == set(A.subs) and all(k in vc21ui.TAB_HELP for k, _ in app.SUBTABS), "every tab has a page and a description")
 ok(not ERR, "no errors so far " + (ERR[0][-300:] if ERR else ""))
 # the options exist and reach the engine
@@ -59,7 +59,7 @@ A.sub.set("quick"); pump(A, .3); ok("🧠 Smart finding" in texts(A.subs["quick"
 
 # ---------------- extra rows
 A.simple.set(False); pump(A, .4)
-ok([k for k, _ in A.subbar.items] == ["smart", "basics", "text", "fx", "captions", "emotes", "polish", "extras", "post"], "all options: nine tabs")
+ok([k for k, _ in A.subbar.items] == ["smart", "basics", "text", "fx", "captions", "emotes", "polish", "extras", "safe", "post"], "all options: ten tabs")
 A.sub.set("captions"); pump(A, .5)
 tx = texts(A.subs["captions"])
 for need in ("✨ More caption styling", "Letters", "Outline", "Shadow", "Words at a time", "Box behind the words", "🌈 Rainbow words"):
@@ -98,8 +98,8 @@ A.o["slowmo"].set(False); A.o["hop_logo"].set(False); A.o["range_from"].set("");
 # ================================================================ Tools window
 ok(A.toolbtn.winfo_ismapped(), "the Tools button is in the banner")
 A.open_toolbox(); pump(A, .8)
-ok(A.tools_win.winfo_exists() and list(A.tools_pages) == ["watch", "health", "clean", "space", "looks", "tags", "vocab", "sheet"], f"Tools window has eight pages {list(A.tools_pages)}")
-A.open_toolbox("looks"); pump(A, .3); ok(A.tools_nb.index(A.tools_nb.select()) == 4, "asking for a page selects it (and does not open a second window)")
+ok(A.tools_win.winfo_exists() and list(A.tools_pages)[:8] == ["watch", "health", "clean", "space", "looks", "tags", "vocab", "sheet"], f"Tools window still has the eight 2.2 pages first {list(A.tools_pages)}")
+A.open_toolbox("looks"); pump(A, .3); ok(A.tools_nb.select() == str(A.tools_groups["looks"][0]) and A.tools_groups["looks"][1].select() == str(A.tools_pages["looks"]), "asking for a page selects it and its group (and does not open a second window)")
 ok(len([w for w in A.winfo_children() if isinstance(w, tk.Toplevel) and w.title().startswith("Tools")]) == 1, "only one Tools window")
 shot(A, "g22_tools")
 # watch

@@ -303,6 +303,16 @@ def ledger_set(path, **kw):
     return False
 
 
+def ledger_move(old, new):
+    """A clip was moved or renamed: point its ledger row at the new place. Returns True when a row was changed."""
+    a, b = os.path.abspath(str(old)), os.path.abspath(str(new))
+    with _LOCK:
+        d = _load(); hit = False
+        for c in d["clips"]:
+            if c.get("path") == a: c["path"] = b; hit = True
+        return _save(d) if hit else False
+
+
 def ledger_forget_missing():
     """Drop entries of clips that were deleted (outside the app). Returns how many."""
     with _LOCK:
@@ -320,7 +330,7 @@ def copy_ready(mp4, folder, with_files=True):
     try:
         os.makedirs(folder, exist_ok=True)
         stem = os.path.splitext(str(mp4))[0]
-        for f in [str(mp4)] + ([stem + e for e in (".txt", ".srt", "_cover.jpg")] if with_files else []):
+        for f in [str(mp4)] + ([stem + e for e in (".txt", ".srt", "_cover.jpg", "_cover_b.jpg", "_cover_c.jpg", "_posts.txt", "_alt.txt", ".gif", ".mp3", ".m4a")] if with_files else []):
             if not os.path.isfile(f): continue
             dest = os.path.join(folder, os.path.basename(f))
             if os.path.abspath(dest) == os.path.abspath(f): continue

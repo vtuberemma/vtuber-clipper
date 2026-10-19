@@ -37,3 +37,7 @@ python tools/make_portable_zip.py --runtime C:\path\to\a\previous\VTuberClipper
 ## Updating an existing install
 
 `python tools/make_update_zip.py` makes a zip that holds only `app\` (code, pictures, sounds, emoji), a README and a HOW_TO_UPDATE; users drag its `app` folder over their own. Settings, saved styles, music, emotes and clips live in the user folder and are not touched.
+
+## Parts for upload limits
+
+If a place only accepts small files, `python tools/split_zip.py dist/VTuberClipper_<version>_beta.zip --out dist/VTuberClipper_<version>_beta_in_parts` cuts the full zip into 28 MiB parts (`.001`, `.002` …) and writes `join_parts.bat`, which glues them back together on Windows and prints the SHA-256 the joined file must have.

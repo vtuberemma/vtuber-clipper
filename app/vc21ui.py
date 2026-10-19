@@ -17,8 +17,8 @@ METHODS = {}
 NEW_STR = ("text_boxes", "callouts", "custom_layout", "tts_voice", "tts_rate")
 # plain names for the tabs of the Shorts page. Simple view shows four of them, "All options" shows every tab except Quick setup.
 SUBTABS = [("quick", "Quick setup"), ("smart", "Smart finding"), ("basics", "Clips & layout"), ("text", "Words & buttons"), ("fx", "Effects"), ("captions", "Captions"),
-           ("emotes", "Chibi emotes"), ("polish", "Picture & voice"), ("extras", "Logo & music"), ("post", "Posting & files")]
-SIMPLE_TABS = ("quick", "smart", "text", "captions", "extras")
+           ("emotes", "Chibi emotes"), ("polish", "Picture & voice"), ("extras", "Logo & music"), ("safe", "Privacy & checks"), ("post", "Posting & files")]
+SIMPLE_TABS = ("quick", "smart", "text", "captions", "extras", "safe")
 TAB_HELP = {
     "quick": "The few things most people change. Pick your look above, then check these. Everything else is under “Show all options”.",
     "smart": "How I find the best moments: I tell laughs, screams, singing, stories and gameplay apart, skip greetings, vary the picks and can learn from the clips you keep.",
